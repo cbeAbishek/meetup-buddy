@@ -7,7 +7,14 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6",
+        "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+        "dark:shadow-[0_8px_30px_rgb(0,0,0,0.1)]",
+        "hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]",
+        "dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.15)]",
+        "transition-all duration-300 ease-in-out",
+        "border-slate-200/70 dark:border-slate-800",
+        "backdrop-blur-sm",
         className
       )}
       {...props}
@@ -32,7 +39,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
-      className={cn("leading-none font-semibold", className)}
+      className={cn("leading-none font-semibold text-lg text-slate-900 dark:text-slate-50", className)}
       {...props}
     />
   )
@@ -42,7 +49,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-muted-foreground text-sm mt-1", className)}
       {...props}
     />
   )
@@ -65,7 +72,10 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-content"
-      className={cn("px-6", className)}
+      className={cn(
+        "px-6 prose-sm prose-slate dark:prose-invert prose-headings:font-semibold prose-p:text-slate-500 dark:prose-p:text-slate-400",
+        className
+      )}
       {...props}
     />
   )
@@ -75,7 +85,10 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-footer"
-      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      className={cn(
+        "flex items-center justify-between px-6 [.border-t]:pt-6 text-sm text-slate-500 dark:text-slate-400",
+        className
+      )}
       {...props}
     />
   )
