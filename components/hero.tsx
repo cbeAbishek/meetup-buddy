@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
@@ -22,8 +23,16 @@ export function Hero() {
 
         <div className="mt-8 lg:mt-0 lg:w-1/2">
           <div className="rounded-2xl bg-gradient-to-br from-white to-slate-50 shadow-lg p-6">
-            <div className="h-48 bg-gradient-to-br from-[color:var(--brand-50)] to-[color:var(--brand-100)] rounded-md flex items-center justify-center text-[color:var(--primary)] font-medium">
-              Demo preview (replace with /public/preview.png)
+            {/* Demo preview image */}
+            <div className="overflow-hidden rounded-md">
+              <Image
+                src="/assets/illustrations/meeting-illustration.svg"
+                alt="Meetup Buddy illustration"
+                width={1200}
+                height={480}
+                className="w-full h-48 object-cover"
+                priority
+              />
             </div>
           </div>
         </div>
