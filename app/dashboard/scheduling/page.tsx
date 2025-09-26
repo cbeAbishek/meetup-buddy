@@ -167,7 +167,7 @@ export default function SchedulingPage() {
             </div>
           </div>
         </main>
-            <RightPanel />
+            {/* <RightPanel /> */}
           </div>
         </div>
       </SidebarInset>
