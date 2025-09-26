@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Simple demo preview SVG saved with .png extension for placeholder purposes -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#06b6d4" />
+      <stop offset="1" stop-color="#0ea5a4" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#0f172a" />
+  <rect x="48" y="48" width="1104" height="534" rx="12" fill="url(#g)" opacity="0.95" />
+  <g fill="#fff" font-family="Inter, Arial, sans-serif">
+    <text x="96" y="140" font-size="36" font-weight="700">Meetup Buddy — Demo Preview</text>
+    <text x="96" y="190" font-size="18" fill="#e6fffa">Smart Slot Finder • Auto Agenda • Follow-Ups • Summaries</text>
+
+    <!-- mock UI card thumbnails -->
+    <rect x="96" y="230" width="320" height="180" rx="8" fill="#ffffff22" />
+    <rect x="440" y="230" width="320" height="180" rx="8" fill="#ffffff22" />
+    <rect x="784" y="230" width="320" height="180" rx="8" fill="#ffffff22" />
+
+    <text x="116" y="270" font-size="16" fill="#fff">Calendar slot grid</text>
+    <text x="460" y="270" font-size="16" fill="#fff">Generated agenda</text>
+    <text x="804" y="270" font-size="16" fill="#fff">Follow-ups</text>
+  </g>
+</svg>

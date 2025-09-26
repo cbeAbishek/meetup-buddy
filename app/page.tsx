@@ -10,7 +10,8 @@ import {
 
 import { supabase } from "@/lib/supabase";
 import { Hero } from "@/components/hero";
-import { FeatureCard } from "@/components/feature-card";
+import { PlatformShowcase } from "@/components/platform-showcase";
+import { ProjectFeatures } from "@/components/project-features";
 
 function SupabaseTester() {
   const [table, setTable] = useState('')
@@ -68,35 +69,14 @@ export default function Page() {
 
       {/* Hero */}
       <Hero />
-
-      {/* Features */}
-      <section id="features" className="container mx-auto px-6 py-12">
-        <h2 className="text-2xl font-bold mb-6">What you get</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FeatureCard title="Smart Slot Finder" desc="Find cross-time-zone slots that respect preferences and past context." />
-          <FeatureCard title="Auto Agenda Generator" desc="Create agendas from meeting history and sales context in one click." />
-          <FeatureCard title="Follow-Up Tracker" desc="Assign, track, and visualize follow-ups with owners and deadlines." />
-         </div>
-       </section>
+      <PlatformShowcase />
+      <ProjectFeatures />
 
       {/* Supabase test */}
       <section id="supabase" className="container mx-auto px-6 py-12">
         <h2 className="text-2xl font-bold mb-4">Supabase quick test</h2>
-        
-
         <SupabaseTester />
       </section>
-
-      {/* Footer */}
-      <footer className="border-t mt-12 bg-white">
-        <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-sm text-slate-600">© {new Date().getFullYear()} YourBrand. All rights reserved.</div>
-          <div className="flex gap-4">
-            <a className="text-sm text-slate-600 hover:text-slate-900" href="#privacy">Privacy</a>
-            <a className="text-sm text-slate-600 hover:text-slate-900" href="#terms">Terms</a>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

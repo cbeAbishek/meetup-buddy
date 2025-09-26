@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="480" viewBox="0 0 1200 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="480" rx="16" fill="#F8FAFC"/>
+  <g transform="translate(60,40)">
+    <rect x="0" y="0" width="1080" height="400" rx="12" fill="url(#bg)" />
+    <defs>
+      <linearGradient id="bg" x1="0" x2="1">
+        <stop offset="0" stop-color="#E6FFFA" />
+        <stop offset="1" stop-color="#EFFCF6" />
+      </linearGradient>
+    </defs>
+
+    <!-- calendar card -->
+    <rect x="36" y="36" width="420" height="328" rx="10" fill="#ffffff" stroke="#E6EEF0" />
+    <g transform="translate(56,56)">
+      <rect x="0" y="0" width="360" height="40" rx="6" fill="#06B6D4" opacity="0.12"/>
+      <text x="12" y="26" font-family="Inter, Arial" font-size="14" fill="#0B7285">Smart Slot Finder</text>
+      <g transform="translate(0,64)">
+        <!-- slots grid -->
+        <rect x="0" y="0" width="360" height="200" rx="6" fill="#F8FAFC" stroke="#E6EEF0"/>
+        <rect x="12" y="12" width="88" height="24" rx="4" fill="#06B6D4" opacity="0.14"/>
+        <rect x="108" y="12" width="88" height="24" rx="4" fill="#06B6D4" opacity="0.08"/>
+        <rect x="204" y="12" width="88" height="24" rx="4" fill="#06B6D4" opacity="0.04"/>
+        <rect x="12" y="44" width="280" height="18" rx="4" fill="#94F3E4" opacity="0.6"/>
+      </g>
+    </g>
+
+    <!-- people illustration -->
+    <g transform="translate(520,56)">
+      <circle cx="80" cy="60" r="36" fill="#14B8A6"/>
+      <circle cx="180" cy="60" r="36" fill="#2DD4BF"/>
+      <circle cx="280" cy="60" r="36" fill="#5EEAD4"/>
+      <rect x="40" y="140" width="320" height="180" rx="8" fill="#ffffff" stroke="#E6EEF0" />
+      <text x="60" y="180" font-family="Inter, Arial" font-size="16" fill="#0F172A">Auto-generated agenda</text>
+      <rect x="60" y="200" width="260" height="12" rx="6" fill="#0EA5A4" opacity="0.15"/>
+      <rect x="60" y="224" width="200" height="12" rx="6" fill="#06B6D4" opacity="0.08"/>
+      <rect x="60" y="248" width="220" height="12" rx="6" fill="#06B6D4" opacity="0.06"/>
+    </g>
+
+    <!-- follow-ups list -->
+    <g transform="translate(880,56)">
+      <rect x="0" y="0" width="160" height="120" rx="8" fill="#ffffff" stroke="#E6EEF0" />
+      <text x="16" y="28" font-family="Inter, Arial" font-size="14" fill="#0F172A">Follow-ups</text>
+      <rect x="16" y="44" width="128" height="10" rx="5" fill="#06B6D4" opacity="0.12"/>
+      <rect x="16" y="62" width="100" height="10" rx="5" fill="#06B6D4" opacity="0.08"/>
+      <rect x="16" y="80" width="80" height="10" rx="5" fill="#06B6D4" opacity="0.06"/>
+    </g>
+  </g>
+</svg>
