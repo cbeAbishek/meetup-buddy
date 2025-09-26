@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 // to the browser (anon/public keys) and should be prefixed with NEXT_PUBLIC_
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
 
 if (!supabaseUrl || !supabaseAnonKey) {
   if (process.env.NODE_ENV !== 'production') {
@@ -17,9 +18,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
   )
 }
 
-// Create and export a single Supabase client for the app to import.
-// Use the public anon key for client-side usage. For server-side operations
-// that require elevated privileges use a service_role key on the server only.
+// Client-side Supabase client (uses anon key)
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
@@ -33,6 +32,20 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   global: {
     headers: {
       'X-Client-Info': 'meetup-buddy@1.0.0'
+    }
+  }
+})
+
+// Server-side Supabase client with service role key (for API routes)
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'meetup-buddy-admin@1.0.0'
     }
   }
 })
