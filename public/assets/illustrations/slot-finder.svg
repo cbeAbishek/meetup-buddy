@@ -1,0 +1,22 @@
+<svg width="1200" height="500" viewBox="0 0 1200 500" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Slot finder illustration">
+  <rect width="1200" height="500" rx="16" fill="#F8FAFC" />
+  <g transform="translate(80,60)">
+    <rect x="0" y="0" width="440" height="360" rx="12" fill="#ffffff" stroke="#E6EEF0" />
+    <text x="24" y="36" fill="#0f172a" font-size="18" font-family="Inter, sans-serif">Available slots</text>
+    <g transform="translate(24,64)" fill="#0f766e">
+      <rect x="0" y="0" width="240" height="36" rx="8" fill="#E6FFFA" />
+      <text x="12" y="24" fill="#0f766e" font-size="14">10:00 — 10:30</text>
+    </g>
+    <g transform="translate(24,112)" fill="#0f766e">
+      <rect x="0" y="0" width="180" height="36" rx="8" fill="#F0FFF9" />
+      <text x="12" y="24" fill="#0f766e" font-size="14">11:30 — 11:45</text>
+    </g>
+  </g>
+  <g transform="translate(560,60)">
+    <rect x="0" y="0" width="520" height="360" rx="12" fill="#ffffff" stroke="#E6EEF0" />
+    <text x="24" y="36" fill="#0f172a" font-size="18" font-family="Inter, sans-serif">Match preview</text>
+    <circle cx="120" cy="120" r="42" fill="#20c997" />
+    <text x="96" y="128" fill="#ffffff" font-size="14">10:00</text>
+    <text x="24" y="200" fill="#334155" font-size="14">Matches between you and Alex</text>
+  </g>
+</svg>
