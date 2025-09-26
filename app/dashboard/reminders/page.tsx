@@ -10,6 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { RightPanel } from "@/components/ui/right-panel"
 
 export default function RemindersPage() {
   return (
@@ -71,7 +72,7 @@ export default function RemindersPage() {
                   <CardContent>
                     <div className="space-y-4">
                       {Array.from({ length: 3 }).map((_, i) => (
-                        <div key={i} className="flex items-start gap-4 p-3 bg-amber-50/50 dark:bg-amber-950/20 rounded-md">
+                        <div key={i} className="flex items-start gap-4 p-4 bg-amber-50/50 dark:bg-amber-950/20 rounded-lg">
                           <div className="h-10 w-10 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center text-amber-700 dark:text-amber-300 shrink-0">
                             <span className="font-semibold">{i + 1}h</span>
                           </div>
@@ -100,8 +101,8 @@ export default function RemindersPage() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
-                            <Button size="sm" variant="outline" className="h-8">Snooze</Button>
-                            <Button size="sm" className="h-8">Complete</Button>
+                            <Button size="sm" variant="outline">Snooze</Button>
+                            <Button size="sm">Complete</Button>
                           </div>
                         </div>
                       ))}
@@ -121,7 +122,7 @@ export default function RemindersPage() {
                   <CardContent>
                     <div className="space-y-4">
                       {Array.from({ length: 4 }).map((_, i) => (
-                        <div key={i} className="flex items-start gap-4 p-3 bg-muted/50 rounded-md">
+                        <div key={i} className="flex items-start gap-4 p-4 bg-muted/50 rounded-lg">
                           <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground shrink-0">
                             <span className="font-semibold">{i + 9}:00</span>
                           </div>
@@ -148,7 +149,7 @@ export default function RemindersPage() {
                               </Badge>
                             </div>
                           </div>
-                          <Button size="sm" variant="ghost" className="h-8">Edit</Button>
+                          <Button size="sm" variant="ghost">Edit</Button>
                         </div>
                       ))}
                     </div>
@@ -164,7 +165,7 @@ export default function RemindersPage() {
                   <CardContent>
                     <div className="space-y-3">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <div key={i} className="flex items-center justify-between py-2 border-b last:border-b-0">
+                        <div key={i} className="flex items-center justify-between py-3 border-b last:border-b-0">
                           <div className="flex items-start gap-3">
                             <div className="w-16 text-xs text-muted-foreground">
                               {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][i]}

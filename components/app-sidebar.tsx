@@ -9,10 +9,8 @@ import {
   Calendar,
   ListTodo,
   Bell,
-  Archive,
-  Settings,
-  Search,
-  HelpCircle,
+  Users,
+  MessageSquare,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
@@ -53,6 +51,21 @@ const navigationItems = [
     href: "/dashboard/agenda",
   },
   {
+    title: "Groups",
+    icon: Users,
+    href: "/dashboard/groups",
+  },
+  {
+    title: "Calendar",
+    icon: Calendar,
+    href: "/dashboard/calendar",
+  },
+  {
+    title: "Chats",
+    icon: MessageSquare,
+    href: "/dashboard/chats",
+  },
+  {
     title: "Scheduling",
     icon: Calendar,
     href: "/dashboard/scheduling",
@@ -66,32 +79,11 @@ const navigationItems = [
     title: "Reminders",
     icon: Bell,
     href: "/dashboard/reminders",
-  },
-  {
-    title: "Data Library",
-    icon: Archive,
-    href: "/dashboard/data-library",
   }
 ]
 
-// Footer items
-const footerItems = [
-  {
-    title: "Settings",
-    icon: Settings,
-    href: "/dashboard/settings",
-  },
-  {
-    title: "Search",
-    icon: Search,
-    href: "/search",
-  },
-  {
-    title: "Get Help",
-    icon: HelpCircle,
-    href: "/help",
-  }
-]
+// Footer items removed per request
+const footerItems: Array<{ title: string; icon?: React.ElementType; href?: string }> = []
 
 // Custom Toggle Button with smooth animations and position changes
 function AnimatedSidebarTrigger() {
@@ -178,11 +170,14 @@ function AnimatedMenuItem({ item, isActive }: AnimatedMenuItemProps) {
                 className={cn(
                   "transition-all duration-300 ease-in-out",
                   "hover:scale-105 active:scale-95",
-                  isActive && "bg-sidebar-primary text-sidebar-primary-foreground"
+                  isActive && "bg-teal-50 dark:bg-teal-900/40 shadow-sm ring-1 ring-teal-600/20 dark:ring-teal-600/25 border-l-4 border-teal-600"
                 )}
               >
                 <Link href={item.href}>
-                  <item.icon className="h-4 w-4 transition-transform duration-200" />
+                  <item.icon className={cn(
+                    "h-4 w-4 transition-transform duration-200",
+                    isActive && "text-[color:var(--primary)]"
+                  )} />
                 </Link>
               </SidebarMenuButton>
             </TooltipTrigger>
@@ -203,14 +198,19 @@ function AnimatedMenuItem({ item, isActive }: AnimatedMenuItemProps) {
         className={cn(
           "transition-all duration-300 ease-in-out",
           "hover:scale-[1.02] active:scale-98",
-          "group relative overflow-hidden"
+          "group relative overflow-hidden",
+          isActive && "bg-teal-50 dark:bg-teal-900/40 shadow-sm ring-1 ring-teal-600/20 dark:ring-teal-600/25 border-l-4 border-teal-600"
         )}
       >
         <Link href={item.href} className="flex items-center gap-3">
-          <item.icon className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+          <item.icon className={cn(
+            "h-4 w-4 transition-transform duration-200 group-hover:scale-110",
+            isActive && "text-[color:var(--primary)]"
+          )} />
           <span className={cn(
             "transition-all duration-300 ease-in-out",
-            "transform translate-x-0 opacity-100"
+            "transform translate-x-0 opacity-100",
+            isActive && "text-[color:var(--primary)] font-semibold"
           )}>
             {item.title}
           </span>
@@ -254,16 +254,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
-              {footerItems.map((item) => (
-                <AnimatedMenuItem
-                  key={item.href}
-                  item={item}
-                  isActive={pathname === item.href}
-                />
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+              <SidebarMenu className="space-y-1">
+                {footerItems.length > 0 && footerItems.filter(i => i.href && i.icon).map((item) => (
+                  <AnimatedMenuItem
+                    key={item.href!}
+                    item={item as { title: string; icon: React.ElementType; href: string }}
+                    isActive={pathname === item.href}
+                  />
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
       

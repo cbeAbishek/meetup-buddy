@@ -35,7 +35,8 @@ function DashboardContent() {
           "--sidebar-width-icon": "3rem",
           "--sidebar-primary": "#0d9488", // tailwind teal-600
           "--sidebar-primary-foreground": "#ffffff",
-          "--sidebar-accent": "#0d9488",
+          // For the dashboard we want hover/option accents to use teal-700
+          "--sidebar-accent": "#0f766e", // tailwind teal-700
           "--sidebar-accent-foreground": "#ffffff",
         } as React.CSSProperties
       }
@@ -50,9 +51,9 @@ function DashboardContent() {
             <div className="flex items-center justify-between">
               <Breadcrumb items={["Dashboard", "Meeting Overview"]} />
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-950/50 dark:text-teal-300 dark:border-teal-800">
+                <Badge variant="outline" className="bg-teal-50 text-teal-600 border-teal-200 dark:bg-teal-950/50 dark:text-teal-600 dark:border-teal-800">
                   <div className="flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-500 animate-pulse"></span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-teal-600 animate-pulse"></span>
                     <span>AI Assistant Active</span>
                   </div>
                 </Badge>
@@ -116,7 +117,7 @@ function DashboardContent() {
                               <CardTitle>Next Meeting: Q4 Planning</CardTitle>
                               <CardDescription className="mt-1">Today at 2:00 PM · 60 minutes · Conference Room A</CardDescription>
                             </div>
-                            <Badge className="bg-teal-500 hover:bg-teal-600">
+                            <Badge className="bg-teal-50 text-teal-600 border-teal-200 hover:bg-teal-100">
                               <span className="flex items-center gap-1">
                                 <span className="h-1.5 w-1.5 rounded-full bg-white"></span>
                                 <span>In 3 hours</span>
@@ -129,15 +130,15 @@ function DashboardContent() {
                             <Accordion title="Meeting Agenda">
                               <div className="space-y-3">
                                 <div className="flex items-center gap-2 text-sm">
-                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300">1</div>
+                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-600">1</div>
                                   <div>Q4 Sales Projections - <span className="text-slate-500">Alex (15 min)</span></div>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm">
-                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300">2</div>
+                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-600">2</div>
                                   <div>Marketing Strategy - <span className="text-slate-500">Jamie (20 min)</span></div>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm">
-                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300">3</div>
+                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-600">3</div>
                                   <div>Budget Allocation - <span className="text-slate-500">Morgan (25 min)</span></div>
                                 </div>
                               </div>
@@ -222,7 +223,7 @@ function DashboardContent() {
                         <CardContent className="space-y-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <div className="flex h-8 w-8 items-center justify-center rounded bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300">
+                              <div className="flex h-8 w-8 items-center justify-center rounded bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-600">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                   <path d="M12 20V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                   <path d="M18 20V4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -317,7 +318,7 @@ function DashboardContent() {
                             </div>
                             <p className="mt-2 text-sm text-slate-500">Quarterly review meeting with all department heads. Discussion focused on Q3 results and preliminary Q4 planning.</p>
                             <div className="mt-3 flex justify-end">
-                              <button className="text-xs text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300 transition-colors">
+                              <button className="text-xs text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-md px-2 py-1 transition-colors">
                                 View Summary →
                               </button>
                             </div>
@@ -329,7 +330,7 @@ function DashboardContent() {
                             </div>
                             <p className="mt-2 text-sm text-slate-500">Product team presented updated roadmap for Q2-Q3. New features timeline approved.</p>
                             <div className="mt-3 flex justify-end">
-                              <button className="text-xs text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300 transition-colors">
+                              <button className="text-xs text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-md px-2 py-1 transition-colors">
                                 View Summary →
                               </button>
                             </div>

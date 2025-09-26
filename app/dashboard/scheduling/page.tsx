@@ -1,3 +1,7 @@
+"use client"
+
+import * as React from "react"
+import { useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -12,8 +16,11 @@ import { Badge } from "@/components/ui/badge"
 import { DatePicker } from "@/components/ui/date-picker"
 import { SchedulingTable } from "@/components/ui/scheduling-table"
 import { Button } from "@/components/ui/button"
+import { RightPanel } from "@/components/ui/right-panel"
 
 export default function SchedulingPage() {
+  const router = useRouter()
+
   return (
     <SidebarProvider
       style={
@@ -40,17 +47,24 @@ export default function SchedulingPage() {
         <div className="flex-1 overflow-auto">
           <div className="flex">
             <main className="flex-1 px-6 py-6">
-          <div className="flex items-center justify-between">
-            <Breadcrumb items={["Dashboard", "Scheduling"]} />
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950/50 dark:text-green-300 dark:border-green-800">
-              Today, Sep 26
-            </Badge>
-          </div>
+              <div className="flex items-center gap-4 mb-4">
+                <button aria-label="go-back" onClick={() => router.back()} className="inline-flex items-center justify-center h-10 w-10 rounded-lg border bg-background">
+                  ←
+                </button>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <Breadcrumb items={["Dashboard", "Scheduling"]} />
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950/50 dark:text-green-300 dark:border-green-800">
+                      Today, Sep 26
+                    </Badge>
+                  </div>
+                </div>
+              </div>
           
-          <div className="mt-6">
-            <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">Meeting Scheduler</h1>
-            <p className="mt-1 text-slate-500 dark:text-slate-400">Auto-find best slots, calendar integration</p>
-          </div>
+              <div className="mt-2">
+                <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Meeting Scheduler</h1>
+                <p className="mt-1 text-base font-medium text-muted-foreground">Auto-find best slots, calendar integration</p>
+              </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-12">
             {/* Left column - Calendar picker */}
@@ -72,7 +86,7 @@ export default function SchedulingPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Duration</label>
-                    <select className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                    <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm">
                       <option>30 minutes</option>
                       <option>45 minutes</option>
                       <option>60 minutes</option>
@@ -82,7 +96,7 @@ export default function SchedulingPage() {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Participants</label>
-                    <select className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                    <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm">
                       <option>All Team Members</option>
                       <option>Sales Team</option>
                       <option>Development Team</option>
@@ -92,7 +106,7 @@ export default function SchedulingPage() {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Priority</label>
-                    <select className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                    <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm">
                       <option>Normal</option>
                       <option>High</option>
                       <option>Urgent</option>

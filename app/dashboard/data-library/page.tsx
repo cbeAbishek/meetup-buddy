@@ -1,4 +1,7 @@
+"use client"
+
 import * as React from "react"
+import { useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -16,6 +19,8 @@ import { DataTable } from "@/components/data-table"
 import { RightPanel } from "@/components/ui/right-panel"
 
 export default function DataLibraryPage() {
+  const router = useRouter()
+
   return (
     <SidebarProvider
       style={
@@ -42,17 +47,24 @@ export default function DataLibraryPage() {
         <div className="flex-1 overflow-auto">
           <div className="flex">
             <main className="flex-1 px-6 py-6">
-          <div className="flex items-center justify-between">
-            <Breadcrumb items={["Dashboard", "Data Library"]} />
-            <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-700">
-              Today, Sep 26
-            </Badge>
-          </div>
+              <div className="flex items-center gap-4 mb-4">
+                <button aria-label="go-back" onClick={() => router.back()} className="inline-flex items-center justify-center h-10 w-10 rounded-lg border bg-background">
+                  ←
+                </button>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <Breadcrumb items={["Dashboard", "Data Library"]} />
+                    <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-700">
+                      Today, Sep 26
+                    </Badge>
+                  </div>
+                </div>
+              </div>
           
-          <div className="mt-6">
-            <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">Meeting Data Library</h1>
-            <p className="mt-1 text-slate-500 dark:text-slate-400">Past meetings, sales records, notes</p>
-          </div>
+              <div className="mt-2">
+                <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Meeting Data Library</h1>
+                <p className="mt-1 text-base font-medium text-muted-foreground">Past meetings, sales records, notes</p>
+              </div>
 
           {/* Search and filters bar */}
           <div className="mt-8 flex flex-col sm:flex-row gap-4 items-end sm:items-center">

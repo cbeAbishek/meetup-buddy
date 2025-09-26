@@ -104,23 +104,23 @@ function SidebarItem({ icon: Icon, title, href, isActive, isCollapsed }: Sidebar
       {isCollapsed ? (
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger asChild>
-              <SidebarMenuButton asChild className={cn("h-9 w-9", isActive && "bg-accent")}>
+              <TooltipTrigger asChild>
+              <SidebarMenuButton asChild className={cn("h-9 w-9", isActive && "bg-teal-50 shadow-sm ring-1 ring-teal-600/20 border-l-4 border-teal-600") }>
                 <Link href={href}>
-                  <Icon className="h-5 w-5" />
+                  <Icon className={cn("h-5 w-5", isActive && "text-[color:var(--primary)]")} />
                   <span className="sr-only">{title}</span>
                 </Link>
               </SidebarMenuButton>
             </TooltipTrigger>
-            <TooltipContent side="right" className="border-none bg-accent text-accent-foreground">
+            <TooltipContent side="right" className="border-none bg-teal-50 text-[color:var(--primary)]">
               {title}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       ) : (
-        <SidebarMenuButton asChild className={cn("justify-start", isActive && "bg-accent")}>
+        <SidebarMenuButton asChild className={cn("justify-start", isActive && "bg-teal-50 shadow-sm ring-1 ring-teal-600/20 border-l-4 border-teal-600") }>
           <Link href={href}>
-            <Icon className="mr-2 h-5 w-5" />
+            <Icon className={cn("mr-2 h-5 w-5", isActive && "text-[color:var(--primary)]")} />
             <span>{title}</span>
           </Link>
         </SidebarMenuButton>

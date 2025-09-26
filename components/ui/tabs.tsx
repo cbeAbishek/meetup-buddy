@@ -43,12 +43,12 @@ function TabsTrigger({
       data-slot="tabs-trigger"
       className={cn(
         "relative inline-flex h-[calc(100%-2px)] flex-1 items-center justify-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-all duration-200 ease-out",
-        "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100",
+  "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100",
         "before:absolute before:inset-0 before:rounded-md before:bg-transparent hover:before:bg-slate-100/80 dark:hover:before:bg-slate-800/50 before:transition-colors before:-z-10",
-        "data-[state=active]:text-teal-700 dark:data-[state=active]:text-teal-300",
-        "data-[state=active]:before:bg-white dark:data-[state=active]:before:bg-slate-800",
-        "data-[state=active]:before:shadow-sm data-[state=active]:before:ring-1 data-[state=active]:before:ring-slate-200/70 dark:data-[state=active]:before:ring-slate-700",
-        "after:absolute after:h-0.5 after:rounded-full after:bg-teal-600 after:left-3 after:right-3 after:bottom-0 after:scale-0 data-[state=active]:after:scale-100 after:transition-transform after:duration-200",
+  // Keep text hue locked; use bg and ring for active state and keep the teal underline indicator
+  "data-[state=active]:before:bg-teal-50 dark:data-[state=active]:before:bg-teal-900/30",
+  "data-[state=active]:before:shadow-sm data-[state=active]:before:ring-1 data-[state=active]:before:ring-teal-600/20 dark:data-[state=active]:before:ring-teal-600/25",
+  "after:absolute after:h-0.5 after:rounded-full after:bg-teal-600 after:left-3 after:right-3 after:bottom-0 after:scale-0 data-[state=active]:after:scale-100 after:transition-transform after:duration-200",
         "focus-visible:outline-none",
         "disabled:pointer-events-none disabled:opacity-50", 
         "[&_svg]:size-4 [&_svg]:shrink-0",

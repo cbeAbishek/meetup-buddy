@@ -1,3 +1,7 @@
+"use client"
+
+import * as React from "react"
+import { useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -16,8 +20,11 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { RightPanel } from "@/components/ui/right-panel"
 
 export default function SettingsPage() {
+  const router = useRouter()
+
   return (
     <SidebarProvider
       style={
@@ -44,17 +51,24 @@ export default function SettingsPage() {
         <div className="flex-1 overflow-auto">
           <div className="flex">
             <main className="flex-1 px-6 py-6">
-          <div className="flex items-center justify-between">
-            <Breadcrumb items={["Dashboard", "Settings"]} />
-            <Badge variant="outline" className="bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700">
-              Last updated Sep 26
-            </Badge>
-          </div>
+              <div className="flex items-center gap-4 mb-4">
+                <button aria-label="go-back" onClick={() => router.back()} className="inline-flex items-center justify-center h-10 w-10 rounded-lg border bg-background">
+                  ←
+                </button>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <Breadcrumb items={["Dashboard", "Settings"]} />
+                    <Badge variant="outline" className="bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700">
+                      Last updated Sep 26
+                    </Badge>
+                  </div>
+                </div>
+              </div>
           
-          <div className="mt-6">
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-50">Account Settings</h1>
-            <p className="mt-1 text-gray-500 dark:text-gray-400">Manage your account preferences and integrations</p>
-          </div>
+              <div className="mt-2">
+                <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-50">Account Settings</h1>
+                <p className="mt-1 text-base font-medium text-muted-foreground">Manage your account preferences and integrations</p>
+              </div>
 
           <div className="mt-8">
             <Tabs defaultValue="profile">

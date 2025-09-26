@@ -1,3 +1,7 @@
+"use client"
+
+import * as React from "react"
+import { useRouter } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -11,8 +15,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from "@/components/ui/badge"
 import { TasksTable } from "@/components/ui/tasks-table"
 import { Checkbox } from "@/components/ui/checkbox"
+import { RightPanel } from "@/components/ui/right-panel"
 
 export default function FollowUpsPage() {
+  const router = useRouter()
+
   return (
     <SidebarProvider
       style={
@@ -39,17 +46,24 @@ export default function FollowUpsPage() {
         <div className="flex-1 overflow-auto">
           <div className="flex">
             <main className="flex-1 px-6 py-6">
-          <div className="flex items-center justify-between">
-            <Breadcrumb items={["Dashboard", "Follow-ups"]} />
-            <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/50 dark:text-purple-300 dark:border-purple-800">
-              Today, Sep 26
-            </Badge>
-          </div>
+              <div className="flex items-center gap-4 mb-4">
+                <button aria-label="go-back" onClick={() => router.back()} className="inline-flex items-center justify-center h-10 w-10 rounded-lg border bg-background">
+                  ←
+                </button>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <Breadcrumb items={["Dashboard", "Follow-ups"]} />
+                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/50 dark:text-purple-300 dark:border-purple-800">
+                      Today, Sep 26
+                    </Badge>
+                  </div>
+                </div>
+              </div>
           
-          <div className="mt-6">
-            <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">Meeting Follow-ups</h1>
-            <p className="mt-1 text-slate-500 dark:text-slate-400">Track tasks, decisions, and their status</p>
-          </div>
+              <div className="mt-2">
+                <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Meeting Follow-ups</h1>
+                <p className="mt-1 text-base font-medium text-muted-foreground">Track tasks, decisions, and their status</p>
+              </div>
 
           <div className="mt-8">
             <Tabs defaultValue="tasks">

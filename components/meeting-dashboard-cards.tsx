@@ -86,7 +86,7 @@ export function MeetingDashboardCards() {
               <CardTitle className="text-lg">Upcoming Meeting</CardTitle>
               <CardDescription className="mt-1">Next on your schedule</CardDescription>
             </div>
-            <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-950/50 dark:text-teal-300 dark:border-teal-800">
+            <Badge variant="outline" className="bg-teal-50 text-teal-600 border-teal-200 dark:bg-teal-950/50 dark:text-teal-600 dark:border-teal-800">
               <Clock className="mr-1 h-3 w-3" /> 
               {format(parseISO(upcomingMeeting.date), "h:mm a")}
             </Badge>
@@ -146,15 +146,15 @@ export function MeetingDashboardCards() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-2 mb-4">
-              <div className="text-center p-2 bg-muted/50 rounded-md">
+              <div className="text-center p-3 bg-muted/50 rounded-lg">
                 <div className="text-lg font-semibold">{pendingFollowUps}</div>
                 <div className="text-xs text-muted-foreground">Open</div>
               </div>
-              <div className="text-center p-2 bg-muted/50 rounded-md">
+              <div className="text-center p-3 bg-muted/50 rounded-lg">
                 <div className="text-lg font-semibold">{completedFollowUps}</div>
                 <div className="text-xs text-muted-foreground">Completed</div>
               </div>
-              <div className="text-center p-2 bg-muted/50 rounded-md">
+              <div className="text-center p-3 bg-muted/50 rounded-lg">
                 <div className="text-lg font-semibold text-destructive">{overdueFollowUps}</div>
                 <div className="text-xs text-muted-foreground">Overdue</div>
               </div>
@@ -163,7 +163,7 @@ export function MeetingDashboardCards() {
             {nextDueFollowUp && (
               <div className="mb-4">
                 <div className="text-sm font-medium mb-1">Next due action:</div>
-                <div className="text-sm p-2 border rounded-md">
+                <div className="text-sm p-3 border rounded-lg">
                   <div className="font-medium">{nextDueFollowUp.task}</div>
                   <div className="text-xs text-muted-foreground flex justify-between mt-1">
                     <span>Assignee: {nextDueFollowUp.assignee}</span>
