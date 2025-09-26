@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "date": "2025-09-20T10:00:00Z",
+    "title": "Q3 Sales Sync",
+    "participants": ["Alice", "Bob", "Carol"],
+    "summary": "Discussed Q3 pipeline and next steps",
+    "decisions": [
+      { "text": "Increase outreach to segment A", "owner": "Alice", "due": "2025-09-27", "status": "open" }
+    ]
+  },
+  {
+    "id": 2,
+    "date": "2025-09-15T14:00:00Z",
+    "title": "Product Roadmap",
+    "participants": ["Dave", "Eve"],
+    "summary": "Reviewed upcoming milestones",
+    "decisions": [
+      { "text": "Finalize PRD for feature X", "owner": "Eve", "due": "2025-09-30", "status": "open" }
+    ]
+  }
+]
