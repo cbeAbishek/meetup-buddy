@@ -35,37 +35,43 @@
           }
         },
         {
-          "name": "Create Profile",
+          "name": "Create Profile (Auth Required)",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{auth_token}}", "description": "JWT token from Supabase auth"}
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"full_name\": \"John Doe\",\n  \"avatar_url\": \"https://example.com/avatar.jpg\",\n  \"timezone\": \"America/New_York\",\n  \"preferences\": {\n    \"theme\": \"dark\",\n    \"notifications\": true\n  }\n}"
+              "raw": "{\n  \"full_name\": \"John Doe\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/profiles",
               "host": ["{{base_url}}"],
               "path": ["api", "profiles"]
             },
-            "description": "Create a new user profile. Required: email, full_name. Optional: avatar_url, timezone, preferences"
+            "description": "Create a new user profile. User must be authenticated. The id and email are automatically taken from the user's session. Required: full_name only."
           }
         },
         {
-          "name": "Create Profile (Minimal - No Avatar)",
+          "name": "Create Profile (Alternative User)",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{auth_token}}", "description": "JWT token from Supabase auth"}
+            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"jane.smith@example.com\",\n  \"full_name\": \"Jane Smith\"\n}"
+              "raw": "{\n  \"full_name\": \"Jane Smith\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/profiles",
               "host": ["{{base_url}}"],
               "path": ["api", "profiles"]
             },
-            "description": "Create profile with only required fields - avatar_url is optional"
+            "description": "Create profile for authenticated user. Only full_name is required - id and email come from auth session."
           }
         }
       ]
@@ -492,6 +498,12 @@
       "key": "base_url",
       "value": "http://localhost:3000",
       "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "your_supabase_jwt_token_here",
+      "type": "string",
+      "description": "JWT token from Supabase authentication - get this from your app's auth flow"
     },
     {
       "key": "test_user_id", 

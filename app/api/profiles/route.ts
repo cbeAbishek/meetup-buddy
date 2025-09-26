@@ -1,4 +1,6 @@
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 export async function GET(req: Request) {
   try {
@@ -51,32 +53,55 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const supabaseAdmin = getSupabaseAdmin();
-    const body = await req.json();
-    const { email, full_name, avatar_url, timezone, preferences } = body;
+    const supabase = createRouteHandlerClient({ cookies });
+    const { data: { user } } = await supabase.auth.getUser();
 
-    if (!email || !full_name) {
+    if (!user) {
+      return new Response(JSON.stringify({ error: "You must be logged in to create a profile." }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const body = await req.json();
+    const { full_name } = body;
+
+    if (!full_name) {
       return new Response(JSON.stringify({ 
-        error: "email and full_name are required (avatar_url is optional)" 
+        error: "full_name is required" 
       }), { 
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    // Build insert object - avatar_url is optional
-    const insertData: any = {
-      email, 
-      full_name,
-      timezone: timezone || 'UTC',
-      preferences: preferences || {},
+    // Check if a profile for this user already exists
+    const supabaseAdmin = getSupabaseAdmin();
+    const { data: existingProfile, error: existingError } = await supabaseAdmin
+      .from("profiles")
+      .select("id")
+      .eq("id", user.id)
+      .single();
+
+    if (existingError && existingError.code !== 'PGRST116') { // Ignore "no rows found"
+      console.error('Error checking for existing profile:', existingError);
+      return new Response(JSON.stringify({ error: existingError.message }), { status: 500 });
+    }
+
+    if (existingProfile) {
+      return new Response(JSON.stringify({ error: "A profile for this user already exists." }), {
+        status: 409, // Conflict
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Build insert data using the auto-generated id and email from the session
+    const insertData = {
+      id: user.id,
+      email: user.email, 
+      full_name: full_name,
       created_at: new Date().toISOString()
     };
-
-    // Only add avatar_url if it's provided and not empty
-    if (avatar_url && avatar_url.trim()) {
-      insertData.avatar_url = avatar_url;
-    }
 
     const { data, error } = await supabaseAdmin
       .from("profiles")
@@ -109,7 +134,8 @@ export async function PUT(req: Request) {
   try {
     const supabaseAdmin = getSupabaseAdmin();
     const body = await req.json();
-    const { id, full_name, avatar_url, timezone, preferences, notification_settings } = body;
+    // Removed role attribute
+    const { id, full_name } = body;
 
     if (!id) {
       return new Response(JSON.stringify({ error: "Profile id is required" }), { 
@@ -120,17 +146,9 @@ export async function PUT(req: Request) {
 
     const updateData: any = { updated_at: new Date().toISOString() };
     
-    // Only update provided fields
+    // Only update provided fields that exist in the schema
     if (full_name !== undefined) updateData.full_name = full_name;
-    if (timezone !== undefined) updateData.timezone = timezone;
-    if (preferences !== undefined) updateData.preferences = preferences;
-    if (notification_settings !== undefined) updateData.notification_settings = notification_settings;
     
-    // Handle avatar_url specially - allow setting to null/empty to remove
-    if (avatar_url !== undefined) {
-      updateData.avatar_url = avatar_url && avatar_url.trim() ? avatar_url : null;
-    }
-
     const { data, error } = await supabaseAdmin
       .from("profiles")
       .update(updateData)
