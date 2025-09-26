@@ -20,7 +20,22 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Create and export a single Supabase client for the app to import.
 // Use the public anon key for client-side usage. For server-side operations
 // that require elevated privileges use a service_role key on the server only.
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    storageKey: 'meetup-buddy-auth-token',
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    // Configure the session to last longer and handle offline scenarios
+    flowType: 'pkce'
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'meetup-buddy@1.0.0'
+    }
+  }
+})
 
 export default supabase
 

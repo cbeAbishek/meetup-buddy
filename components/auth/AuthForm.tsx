@@ -3,184 +3,149 @@
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { supabase, isSupabaseConfigured, SUPABASE_URL } from '@/lib/supabase'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useAuth } from '@/lib/auth-context'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 export default function AuthForm() {
+  const { signIn, signUp, loading, user } = useAuth()
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [showSql, setShowSql] = useState(false)
-  const [rawResponse, setRawResponse] = useState<any | null>(null)
 
-  // Helper: extract user id from various Supabase auth responses
-  function extractUserIdFromAuthResponse(resp: any) {
-    if (!resp) return null
-    // Supabase v2 may return { data: { user } } or { data: { session, user } }
-    const maybeUser = resp.user ?? resp.data?.user ?? resp.data?.session?.user ?? resp
-    return maybeUser?.id ?? null
+  // Don't show the form if user is already authenticated
+  if (user) {
+    return (
+      <Card className="max-w-md mx-auto">
+        <CardContent className="pt-6">
+          <div className="text-center">
+            <div className="text-sm text-green-700 bg-green-50 p-4 rounded">
+              You are already signed in. Redirecting to dashboard...
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    )
   }
 
   async function handleSignUp() {
     setError(null)
     setMessage(null)
     setShowSql(false)
-    setLoading(true)
+
     // Quick config check
     if (!isSupabaseConfigured) {
       setError('Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local')
-      setLoading(false)
       return
     }
+
     // Basic input validation
     if (!email || !password) {
       setError('Email and password are required')
-      setLoading(false)
       return
     }
+
     try {
-      // Use supabase directly for clearer response shape
-      const res = await supabase.auth.signUp({ email, password })
+      const { error: signUpError } = await signUp(email, password, { full_name: name })
 
-      // Save/debug the full response so UI can display it for debugging
-      setRawResponse(res)
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.debug('supabase.signUp response:', res)
-      }
-
-      // If there's an error, handle existing-user case or show error
-      if (res.error) {
-        const msg = res.error.message ?? String(res.error)
+      if (signUpError) {
+        const msg = signUpError.message ?? String(signUpError)
         // If user already exists, attempt sign-in
         if (/already exists|duplicate|user exists|User already registered/i.test(msg)) {
-          const signInRes = await supabase.auth.signInWithPassword({ email, password })
-          setRawResponse(signInRes)
-          if (process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.debug('supabase.signIn (existing user) response:', signInRes)
-          }
-          if (signInRes.error) {
-            setError(signInRes.error.message ?? String(signInRes.error))
+          const { error: signInError } = await signIn(email, password)
+          if (signInError) {
+            setError(signInError.message ?? String(signInError))
             return
           }
-          const userId = extractUserIdFromAuthResponse(signInRes.data ?? signInRes)
-          if (userId) {
-            // Ensure profile exists
-            const { error: profileError } = await supabase.from('profiles').upsert({ id: userId, email, full_name: name || null })
-            if (profileError) {
-              const pm = profileError.message ?? String(profileError)
-              if (/relation|does not exist|no such table/i.test(pm)) {
-                setShowSql(true)
-                setError('Profiles table not found in your database.')
-              } else {
-                setError(pm)
-              }
-              return
-            }
-            setMessage('Existing user signed in and profile upserted.')
-            return
-          }
+          // Don't set message, let auth state handle redirect
+          console.log('Existing user signed in successfully')
+          return
         }
-
         setError(msg)
         return
       }
 
-  // No immediate error. Extract user id if available.
-  const userId = extractUserIdFromAuthResponse(res.data ?? res)
+      // Don't set success message for new signups either - let auth handle it
+      console.log('Sign up successful, waiting for auth state change...')
+      
+      // Try to create profile after successful signup
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { error: profileError } = await supabase.from('profiles').upsert({
+            id: user.id,
+            email,
+            full_name: name || null
+          })
 
-      if (userId) {
-        // user created and available: upsert profile
-        const { error: profileError } = await supabase.from('profiles').upsert({ id: userId, email, full_name: name || null }).select()
-        if (profileError) {
-          const pm = profileError.message ?? String(profileError)
-          if (/relation|does not exist|no such table/i.test(pm)) {
-            setShowSql(true)
-            setError('Profiles table not found in your database.')
-          } else {
-            setError(pm)
+          if (profileError) {
+            const pm = profileError.message ?? String(profileError)
+            if (/relation|does not exist|no such table/i.test(pm)) {
+              setShowSql(true)
+              setError('Profiles table not found in your database.')
+            } else {
+              setError(pm)
+            }
+            return
           }
-          return
         }
-
-        setMessage('Sign-up successful. Profile created/updated.')
-      } else {
-        // No user id present — likely email confirmation required
-        setMessage('Sign-up initiated. Check your email to confirm your account. Profile will be created after confirmation.')
+      } catch (profileError) {
+        console.log('Profile creation error (non-critical):', profileError)
       }
     } catch (err: any) {
       setError(err?.message ?? String(err))
-    } finally {
-      setLoading(false)
     }
   }
 
   async function handleSignIn() {
     setError(null)
     setMessage(null)
-    setLoading(true)
+
     if (!isSupabaseConfigured) {
       setError('Supabase not configured. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local')
-      setLoading(false)
       return
     }
+
     if (!email || !password) {
       setError('Email and password are required')
-      setLoading(false)
       return
     }
+
     try {
-  const res = await supabase.auth.signInWithPassword({ email, password })
-  setRawResponse(res)
-      if (res.error) {
-        if (process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.debug('supabase.signInWithPassword response (error):', res)
-        }
-        setError(res.error.message ?? String(res.error))
+      const { error } = await signIn(email, password)
+      if (error) {
+        setError(error.message ?? String(error))
         return
       }
 
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.debug('supabase.signInWithPassword response (success):', res)
-      }
-
-      const userId = extractUserIdFromAuthResponse(res.data ?? res)
-      if (userId) {
-        // Ensure profile exists for this user
-        const { error: profileError } = await supabase.from('profiles').upsert({ id: userId, email, full_name: name || null })
-        if (profileError) {
-          const pm = profileError.message ?? String(profileError)
-          if (/relation|does not exist|no such table/i.test(pm)) {
-            setShowSql(true)
-            setError('Profiles table not found in your database.')
-          } else {
-            setError(pm)
-          }
-          return
-        }
-      }
-
-      setMessage('Signed in successfully.')
+      // Don't set a success message here - let the auth state change handle the redirect
+      console.log('Sign in successful, waiting for auth state change...')
     } catch (err: any) {
       setError(err?.message ?? String(err))
-    } finally {
-      setLoading(false)
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (mode === 'signup') await handleSignUp()
-    else await handleSignIn()
+    if (mode === 'signup') {
+      await handleSignUp()
+    } else {
+      await handleSignIn()
+    }
   }
 
-  const sqlSnippet = `-- Run this in Supabase SQL editor to create a simple profiles table\nCREATE TABLE profiles (\n  id uuid PRIMARY KEY,\n  email text UNIQUE,\n  full_name text,\n  created_at timestamptz DEFAULT now()\n);`
+  const sqlSnippet = `-- Run this in Supabase SQL editor to create a simple profiles table
+CREATE TABLE profiles (
+  id uuid PRIMARY KEY,
+  email text UNIQUE,
+  full_name text,
+  created_at timestamptz DEFAULT now()
+);`
 
   return (
     <Card className="max-w-md mx-auto">
@@ -188,58 +153,64 @@ export default function AuthForm() {
         <CardTitle>{mode === 'signup' ? 'Create account' : 'Sign in'}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {mode === 'signup' && (
-            <input
-              placeholder="Full name (optional)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="border px-3 py-2 rounded"
-            />
+            <div className="space-y-2">
+              <Label htmlFor="name">Full name (optional)</Label>
+              <Input
+                id="name"
+                placeholder="Full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
           )}
 
-          <input
-            placeholder="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border px-3 py-2 rounded"
-            required
-          />
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-          <input
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border px-3 py-2 rounded"
-            required
-          />
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
             <Button type="submit" disabled={loading}>
               {loading ? 'Working...' : mode === 'signup' ? 'Create account' : 'Sign in'}
             </Button>
-            <Button variant="outline" type="button" onClick={() => setMode(mode === 'signup' ? 'signin' : 'signup')}>
+            <Button 
+              variant="outline" 
+              type="button" 
+              onClick={() => setMode(mode === 'signup' ? 'signin' : 'signup')}
+              disabled={loading}
+            >
               {mode === 'signup' ? 'Have an account? Sign in' : "Don't have an account? Sign up"}
             </Button>
           </div>
 
-          {message && <div className="text-sm text-green-700">{message}</div>}
-          {error && <div className="text-sm text-red-600">{error}</div>}
+          {message && <div className="text-sm text-green-700 bg-green-50 p-2 rounded">{message}</div>}
+          {error && <div className="text-sm text-red-600 bg-red-50 p-2 rounded">{error}</div>}
 
           {showSql && (
             <div className="mt-3 bg-slate-50 p-3 rounded border">
               <div className="text-sm mb-2">Profiles table missing — run this SQL in Supabase SQL editor:</div>
               <pre className="text-xs overflow-auto whitespace-pre-wrap">{sqlSnippet}</pre>
-            </div>
-          )}
-
-          {/* Dev-only: show raw Supabase response to help debug 400s */}
-          {rawResponse && (
-            <div className="mt-3 bg-black/5 p-3 rounded border">
-              <div className="text-sm mb-2">Raw Supabase response (dev):</div>
-              <pre className="text-xs overflow-auto max-h-48">{JSON.stringify(rawResponse, null, 2)}</pre>
             </div>
           )}
         </form>

@@ -18,10 +18,19 @@ import { MeetingSummary } from "@/components/ui/meeting-summary"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { ProtectedRoute } from "@/components/protected-route"
 
 import data from "./data.json"
 
 export default function Page() {
+  return (
+    <ProtectedRoute>
+      <DashboardContent />
+    </ProtectedRoute>
+  )
+}
+
+function DashboardContent() {
   return (
     <SidebarProvider
       style={
