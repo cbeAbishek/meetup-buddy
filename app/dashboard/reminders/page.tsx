@@ -346,7 +346,7 @@ export default function RemindersPage() {
             </Tabs>
           </div>
         </main>
-            <RightPanel />
+            {/* <RightPanel /> */}
           </div>
         </div>
       </SidebarInset>

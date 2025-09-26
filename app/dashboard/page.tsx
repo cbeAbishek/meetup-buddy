@@ -19,6 +19,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ProtectedRoute } from "@/components/protected-route"
+import MeetupBuddyChatbot from "@/components/meetup-buddy-chatbot"
 
 import data from "./data.json"
 
@@ -43,7 +44,6 @@ function DashboardContent() {
       <AppSidebar />
       <SidebarInset className="flex flex-col bg-slate-50 dark:bg-slate-950">
         <Navbar />
-        <SiteHeader />
         <div className="flex-1 overflow-auto">
           <div className="flex">
             <main className="flex-1 p-6">
@@ -374,6 +374,14 @@ function DashboardContent() {
             <RightPanel />
           </div>
         </div>
+        
+        {/* Add the chatbot component */}
+        {/* <MeetupBuddyChatbot 
+          context={{
+            currentPage: 'dashboard',
+            recentMeetings: ['Q4 Planning', 'Team Standup', 'Product Review']
+          }}
+        /> */}
       </SidebarInset>
     </SidebarProvider>
   )

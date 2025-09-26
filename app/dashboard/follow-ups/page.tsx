@@ -257,7 +257,7 @@ export default function FollowUpsPage() {
             </Tabs>
           </div>
         </main>
-            <RightPanel />
+            {/* <RightPanel /> */}
           </div>
         </div>
       </SidebarInset>
