@@ -41,7 +41,9 @@ export default function SettingsPage() {
       <SidebarInset className="bg-gray-50 dark:bg-gray-950">
         <Navbar />
         <SiteHeader />
-        <main className="flex-1 px-6 py-6">
+        <div className="flex-1 overflow-auto">
+          <div className="flex">
+            <main className="flex-1 px-6 py-6">
           <div className="flex items-center justify-between">
             <Breadcrumb items={["Dashboard", "Settings"]} />
             <Badge variant="outline" className="bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700">
@@ -612,6 +614,9 @@ export default function SettingsPage() {
             </Tabs>
           </div>
         </main>
+            <RightPanel />
+          </div>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

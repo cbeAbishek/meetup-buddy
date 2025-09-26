@@ -35,7 +35,9 @@ export default function RemindersPage() {
       <SidebarInset className="bg-slate-50 dark:bg-slate-950">
         <Navbar />
         <SiteHeader />
-        <main className="flex-1 px-6 py-6">
+        <div className="flex-1 overflow-auto">
+          <div className="flex">
+            <main className="flex-1 px-6 py-6">
           <div className="flex items-center justify-between">
             <Breadcrumb items={["Dashboard", "Reminders"]} />
             <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800">
@@ -344,6 +346,9 @@ export default function RemindersPage() {
             </Tabs>
           </div>
         </main>
+            <RightPanel />
+          </div>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

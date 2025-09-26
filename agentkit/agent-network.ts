@@ -1,4 +1,4 @@
-import { createAgent, createNetwork, openai } from "@inngest/agent-kit";
+import { createAgent, createNetwork, gemini } from "@inngest/agent-kit";
 import { createServer } from "@inngest/agent-kit/server";
 import { inngest } from "@/inngest/clint";
 
@@ -6,7 +6,7 @@ import { inngest } from "@/inngest/clint";
 const myAgent = createAgent({
   name: "Explainer",
   system: "Explain input concisely",
-  model: openai({ model: "gpt-4o" }), // configure provider creds via env
+  model: gemini({ model: "gemini-2.0-flash" }), // configure provider creds via env
 });
 
 const network = createNetwork({

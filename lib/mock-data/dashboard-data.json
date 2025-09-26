@@ -1,0 +1,129 @@
+{
+  "meetings": [
+    {
+      "id": 1,
+      "title": "Product Roadmap Planning",
+      "date": "2025-09-28T14:00:00Z",
+      "duration": 60,
+      "participants": ["Alice Chen", "Bob Smith", "Carol Jones", "David Lee"],
+      "agenda": [
+        "Review Q4 product milestones",
+        "Discuss new feature prioritization",
+        "Resource allocation for upcoming sprints"
+      ],
+      "status": "scheduled",
+      "location": "Conference Room A",
+      "joinUrl": "https://meet.example.com/product-roadmap"
+    },
+    {
+      "id": 2,
+      "title": "Client Onboarding: Acme Corp",
+      "date": "2025-09-28T16:30:00Z",
+      "duration": 45,
+      "participants": ["Emily Wong", "Frank Martinez", "George Kumar"],
+      "agenda": [
+        "Platform introduction and walkthrough",
+        "Implementation timeline discussion",
+        "Q&A session"
+      ],
+      "status": "scheduled",
+      "location": "Virtual Meeting",
+      "joinUrl": "https://meet.example.com/acme-onboarding"
+    },
+    {
+      "id": 3,
+      "title": "Weekly Team Sync",
+      "date": "2025-09-29T10:00:00Z",
+      "duration": 30,
+      "participants": ["Team Alpha"],
+      "agenda": [
+        "Sprint progress update",
+        "Blockers and dependencies",
+        "Key achievements"
+      ],
+      "status": "scheduled",
+      "location": "Huddle Room B",
+      "joinUrl": "https://meet.example.com/team-sync"
+    }
+  ],
+  "followUps": [
+    {
+      "id": 1,
+      "meetingId": 1,
+      "task": "Share updated product specs with design team",
+      "assignee": "Alice Chen",
+      "dueDate": "2025-09-30T23:59:59Z",
+      "status": "pending",
+      "priority": "high"
+    },
+    {
+      "id": 2,
+      "meetingId": 1,
+      "task": "Create resource allocation plan for Q4",
+      "assignee": "Bob Smith",
+      "dueDate": "2025-10-02T23:59:59Z",
+      "status": "pending",
+      "priority": "medium"
+    },
+    {
+      "id": 3,
+      "meetingId": 2,
+      "task": "Send welcome packet to Acme Corp",
+      "assignee": "Emily Wong",
+      "dueDate": "2025-09-29T12:00:00Z",
+      "status": "completed",
+      "priority": "high",
+      "completedDate": "2025-09-28T09:15:00Z"
+    },
+    {
+      "id": 4,
+      "meetingId": 2,
+      "task": "Schedule technical implementation kickoff",
+      "assignee": "George Kumar",
+      "dueDate": "2025-09-30T23:59:59Z",
+      "status": "pending",
+      "priority": "medium"
+    },
+    {
+      "id": 5,
+      "meetingId": 3,
+      "task": "Update sprint board with blockers",
+      "assignee": "David Lee",
+      "dueDate": "2025-09-29T17:00:00Z",
+      "status": "overdue",
+      "priority": "high"
+    }
+  ],
+  "reminders": [
+    {
+      "id": 1,
+      "meetingId": 1,
+      "message": "Prepare slides for Product Roadmap Planning",
+      "dueDate": "2025-09-28T12:00:00Z",
+      "status": "active",
+      "priority": "high"
+    },
+    {
+      "id": 2,
+      "meetingId": 2,
+      "message": "Review Acme Corp requirements document",
+      "dueDate": "2025-09-28T15:00:00Z",
+      "status": "active",
+      "priority": "medium"
+    },
+    {
+      "id": 3,
+      "meetingId": 3,
+      "message": "Compile weekly metrics for team sync",
+      "dueDate": "2025-09-29T09:00:00Z",
+      "status": "active",
+      "priority": "medium"
+    }
+  ],
+  "trustScores": {
+    "actionCompletion": 75,
+    "meetingAttendance": 92,
+    "documentation": 83,
+    "overall": 83
+  }
+}

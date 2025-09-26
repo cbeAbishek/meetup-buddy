@@ -37,7 +37,9 @@ export default function SchedulingPage() {
       <SidebarInset className="bg-slate-50 dark:bg-slate-950">
         <Navbar />
         <SiteHeader />
-        <main className="flex-1 px-6 py-6">
+        <div className="flex-1 overflow-auto">
+          <div className="flex">
+            <main className="flex-1 px-6 py-6">
           <div className="flex items-center justify-between">
             <Breadcrumb items={["Dashboard", "Scheduling"]} />
             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950/50 dark:text-green-300 dark:border-green-800">
@@ -151,6 +153,9 @@ export default function SchedulingPage() {
             </div>
           </div>
         </main>
+            <RightPanel />
+          </div>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

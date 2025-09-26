@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTable } from "@/components/data-table"
+import { RightPanel } from "@/components/ui/right-panel"
 
 export default function DataLibraryPage() {
   return (
@@ -38,7 +39,9 @@ export default function DataLibraryPage() {
       <SidebarInset className="bg-slate-50 dark:bg-slate-950">
         <Navbar />
         <SiteHeader />
-        <main className="flex-1 px-6 py-6">
+        <div className="flex-1 overflow-auto">
+          <div className="flex">
+            <main className="flex-1 px-6 py-6">
           <div className="flex items-center justify-between">
             <Breadcrumb items={["Dashboard", "Data Library"]} />
             <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-700">
@@ -438,6 +441,9 @@ export default function DataLibraryPage() {
             </Tabs>
           </div>
         </main>
+            <RightPanel />
+          </div>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

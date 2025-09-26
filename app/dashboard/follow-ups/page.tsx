@@ -36,7 +36,9 @@ export default function FollowUpsPage() {
       <SidebarInset className="bg-slate-50 dark:bg-slate-950">
         <Navbar />
         <SiteHeader />
-        <main className="flex-1 px-6 py-6">
+        <div className="flex-1 overflow-auto">
+          <div className="flex">
+            <main className="flex-1 px-6 py-6">
           <div className="flex items-center justify-between">
             <Breadcrumb items={["Dashboard", "Follow-ups"]} />
             <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/50 dark:text-purple-300 dark:border-purple-800">
@@ -255,6 +257,9 @@ export default function FollowUpsPage() {
             </Tabs>
           </div>
         </main>
+            <RightPanel />
+          </div>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

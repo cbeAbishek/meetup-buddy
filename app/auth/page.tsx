@@ -11,25 +11,21 @@ export default function AuthPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex justify-center gap-2 md:justify-start">
-          <a href="#" className="flex items-center gap-2 font-medium">
-            <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-              <GalleryVerticalEnd className="size-4" />
-            </div>
-            Acme Inc.
-          </a>
-        </div>
+        {/* Removed company logo/header per request */}
+        <div className="sr-only">Authentication</div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             <AuthForm />
           </div>
         </div>
       </div>
-      <div className="bg-muted relative hidden lg:block">
+      <div className="bg-muted relative hidden lg:flex items-center justify-center">
+        {/* Real-world free stock photo from Unsplash as primary image */}
         <img
-          src="/placeholder.svg"
-          alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+          alt="Team meeting"
+          className="w-full h-full object-cover"
+          loading="lazy"
         />
       </div>
     </div>
