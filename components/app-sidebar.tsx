@@ -21,6 +21,7 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { useSidebar } from "@/components/ui/sidebar"
 import {
   Sidebar,
   SidebarContent,
@@ -62,6 +63,12 @@ const navigationItems = [
     icon: ListTodo,
     href: "/dashboard/follow-ups",
     description: "Track tasks, decisions, status"
+  },
+  {
+    title: "Calendar",
+    icon: Calendar,
+    href: "/dashboard/calendar",
+    description: "Week view, scheduling and bookings"
   },
   {
     title: "Reminders",
@@ -148,19 +155,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [isCollapsed, setIsCollapsed] = React.useState(false)
   const isMobile = useIsMobile()
   const pathname = usePathname()
-  
-  // Handle mobile view state
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
+
+  // Use the Sidebar context for mobile open state so there's a single source of truth
+  const { openMobile, setOpenMobile, toggleSidebar } = useSidebar()
 
   return (
     <>
       {/* Mobile menu button - only shown on mobile */}
       {isMobile && (
-        <Button 
-          variant="ghost" 
-          size="icon" 
+        <Button
+          variant="ghost"
+          size="icon"
           className="fixed top-4 left-4 z-50 md:hidden"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={() => toggleSidebar()}
         >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle menu</span>
@@ -172,8 +179,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         className={cn(
           "border-r transition-all duration-300",
           isCollapsed ? "w-[68px]" : "w-[240px]",
-          isMobile && !isMobileMenuOpen ? "hidden" : "block",
-          isMobile && isMobileMenuOpen ? "absolute inset-y-0 left-0 z-40" : ""
+          // when on mobile, use the sidebar context open state
+          isMobile && !openMobile ? "hidden" : "block",
+          isMobile && openMobile ? "absolute inset-y-0 left-0 z-40" : ""
         )}
         {...props}
       >
@@ -236,10 +244,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </Sidebar>
       
       {/* Overlay to close mobile menu when clicking outside */}
-      {isMobile && isMobileMenuOpen && (
-        <div 
+      {isMobile && openMobile && (
+        <div
           className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm"
-          onClick={() => setIsMobileMenuOpen(false)}
+          onClick={() => setOpenMobile(false)}
         />
       )}
     </>

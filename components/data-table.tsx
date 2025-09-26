@@ -402,15 +402,35 @@ export function DataTable({
   }
 
   // Defensive local references: some TanStack row models may be undefined
-  // briefly during renders; normalize to empty arrays to avoid runtime errors
-  const _rowModel = table.getRowModel?.() as { rows?: any[] } | undefined
-  const rows = _rowModel?.rows ?? []
+  // briefly during renders; normalize to empty arrays to avoid runtime errors.
+  // Wrap in try/catch and validate the shapes to avoid `Cannot read properties of undefined (reading 'length')`.
+  let rows: any[] = []
+  let filteredRows: any[] = []
+  let filteredSelectedRows: any[] = []
 
-  const _filteredRowModel = table.getFilteredRowModel?.() as { rows?: any[] } | undefined
-  const filteredRows = _filteredRowModel?.rows ?? []
+  try {
+    const _rowModel = table?.getRowModel?.() as { rows?: any[] } | undefined
+    if (_rowModel && Array.isArray(_rowModel.rows)) {
+      rows = _rowModel.rows
+    }
 
-  const _filteredSelectedRowModel = table.getFilteredSelectedRowModel?.() as { rows?: any[] } | undefined
-  const filteredSelectedRows = _filteredSelectedRowModel?.rows ?? []
+    const _filteredRowModel = table?.getFilteredRowModel?.() as { rows?: any[] } | undefined
+    if (_filteredRowModel && Array.isArray(_filteredRowModel.rows)) {
+      filteredRows = _filteredRowModel.rows
+    }
+
+    const _filteredSelectedRowModel = table?.getFilteredSelectedRowModel?.() as { rows?: any[] } | undefined
+    if (_filteredSelectedRowModel && Array.isArray(_filteredSelectedRowModel.rows)) {
+      filteredSelectedRows = _filteredSelectedRowModel.rows
+    }
+  } catch (err) {
+    // If TanStack internals throw during transient states, log and continue with empty arrays
+    // eslint-disable-next-line no-console
+    console.warn("DataTable: error reading row models, falling back to empty arrays", err)
+    rows = []
+    filteredRows = []
+    filteredSelectedRows = []
+  }
 
   return (
     <Tabs

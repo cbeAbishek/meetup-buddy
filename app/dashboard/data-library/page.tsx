@@ -157,7 +157,38 @@ export default function DataLibraryPage() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <DataTable />
+                    {/* Provide a safe default data array matching the DataTable schema to avoid undefined row models */}
+                    <DataTable
+                      data={[
+                        {
+                          id: 1,
+                          header: "Q3 Sales Review",
+                          type: "Meeting",
+                          status: "Done",
+                          target: "100",
+                          limit: "60",
+                          reviewer: "Eddie Lake",
+                        },
+                        {
+                          id: 2,
+                          header: "Product Roadmap Planning",
+                          type: "Workshop",
+                          status: "In Progress",
+                          target: "80",
+                          limit: "90",
+                          reviewer: "Assign reviewer",
+                        },
+                        {
+                          id: 3,
+                          header: "Client Onboarding",
+                          type: "Onboarding",
+                          status: "Not Started",
+                          target: "50",
+                          limit: "60",
+                          reviewer: "Jamik Tashpulatov",
+                        },
+                      ]}
+                    />
                   </CardContent>
                 </Card>
 
@@ -357,7 +388,7 @@ export default function DataLibraryPage() {
                             {["$45,000", "$28,500", "$120,000", "$15,750", "$67,800"][i]}
                           </div>
                           <div>
-                            <Badge variant={["secondary", "outline", "secondary", "outline", "destructive"][i]}>
+                            <Badge variant={(["secondary", "outline", "secondary", "outline", "destructive"] as const)[i]}>
                               {["Won", "Pending", "Won", "In Progress", "Lost"][i]}
                             </Badge>
                           </div>
