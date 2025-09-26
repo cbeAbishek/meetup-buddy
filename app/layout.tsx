@@ -35,12 +35,7 @@ export default function RootLayout({
             {children}
           </ConditionalClientLayout>
         </AuthProvider>
-        {/* Static footer for all pages */}
-        <footer className="border-t bg-white">
-          <div className="container mx-auto px-6 py-6 text-sm text-slate-600 text-center">
-            © {new Date().getFullYear()} Meetup Buddy. All rights reserved.
-          </div>
-        </footer>
+    
       </body>
     </html>
   );

@@ -111,9 +111,7 @@ export function PlatformShowcase() {
 	return (
 		<div className="w-full overflow-hidden py-16">
 			<div className="container mx-auto px-4">
-				<h2 className="text-3xl font-bold text-center mb-8">
-					Works with Your Favorite Platforms as an extension
-				</h2>
+				
 
 				<div
 					ref={containerRef}

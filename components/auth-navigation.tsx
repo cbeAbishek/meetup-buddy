@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
+import { motion } from 'framer-motion'
 import { useAuth } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -36,8 +37,16 @@ export function AuthNavigation() {
   if (loading) {
     return (
       <div className="flex items-center gap-3">
-        <div className="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
-        <div className="h-8 w-24 bg-gray-200 rounded animate-pulse"></div>
+        <motion.div 
+          className="h-3 w-16 bg-teal-100 rounded-full"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="h-8 w-20 bg-teal-100 rounded-full"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.2 }}
+        />
       </div>
     )
   }
@@ -48,78 +57,114 @@ export function AuthNavigation() {
     const userInitials = displayName.charAt(0).toUpperCase()
 
     return (
-      <div className="flex items-center gap-4">
-        {/* Show welcome message */}
-        <span className="hidden md:inline text-sm text-slate-600">
-          Welcome, {displayName}
-        </span>
-        
-        {/* Dashboard link if not already on dashboard */}
+      <motion.div 
+        className="flex items-center gap-3"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        {/* Flowing Dashboard link */}
         {!pathname.startsWith('/dashboard') && (
-          <Link 
-            href="/dashboard" 
-            className="text-sm text-[color:var(--primary)] font-medium hover:text-[color:var(--primary)]/80 transition-colors"
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            Dashboard
-          </Link>
+            <Link 
+              href="/dashboard" 
+              className="group relative px-5 py-2.5 text-sm font-semibold text-teal-600 hover:text-white transition-all duration-500 rounded-2xl overflow-hidden"
+            >
+              <span className="relative z-20">Dashboard</span>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-teal-400 to-teal-500 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              />
+            </Link>
+          </motion.div>
         )}
 
+        {/* Flowing User avatar */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={user.user_metadata?.avatar_url} alt={displayName} />
-                <AvatarFallback className="bg-[color:var(--primary)] text-[color:var(--primary-foreground)]">
-                  {userInitials}
-                </AvatarFallback>
-              </Avatar>
-            </Button>
+            <motion.div
+              whileHover={{ scale: 1.08, rotate: 2 }}
+              whileTap={{ scale: 0.92 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
+              <Button variant="ghost" className="relative h-11 w-11 rounded-2xl p-0 hover:bg-teal-50/80 transition-all duration-500 group">
+                <div className="absolute inset-0 bg-gradient-to-br from-teal-200/20 to-teal-300/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-sm"></div>
+                <Avatar className="h-9 w-9 ring-2 ring-transparent hover:ring-teal-200 transition-all duration-500 group-hover:shadow-lg group-hover:shadow-teal-500/25">
+                  <AvatarImage src={user.user_metadata?.avatar_url} alt={displayName} />
+                  <AvatarFallback className="bg-gradient-to-br from-teal-400 to-teal-500 text-white font-bold text-sm rounded-xl">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </motion.div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <div className="flex items-center justify-start gap-2 p-2">
-              <div className="flex flex-col space-y-1 leading-none">
-                <p className="font-medium">{displayName}</p>
-                <p className="w-[200px] truncate text-sm text-muted-foreground">
-                  {user.email}
-                </p>
+          <DropdownMenuContent className="w-52 bg-white/90 backdrop-blur-xl border border-teal-100/60 shadow-2xl rounded-3xl overflow-hidden" align="end" forceMount>
+            <div className="p-4 bg-gradient-to-br from-teal-50/50 to-white border-b border-teal-100/50">
+              <p className="font-bold text-slate-900 text-sm">{displayName}</p>
+              <p className="text-xs text-slate-500 truncate mt-1">
+                {user.email}
+              </p>
+            </div>
+            <div className="p-2">
+              <DropdownMenuItem asChild className="group">
+                <Link href="/dashboard" className="flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:text-teal-700 hover:bg-teal-50 rounded-2xl cursor-pointer transition-all duration-300">
+                  Dashboard
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="group">
+                <Link href="/dashboard/settings" className="flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:text-teal-700 hover:bg-teal-50 rounded-2xl cursor-pointer transition-all duration-300">
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+              <div className="border-t border-teal-100/60 mt-2 pt-2">
+                <DropdownMenuItem onClick={handleSignOut} className="flex items-center px-4 py-3 text-sm font-semibold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-2xl cursor-pointer transition-all duration-300">
+                  Sign out
+                </DropdownMenuItem>
               </div>
             </div>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard" className="cursor-pointer">
-                Dashboard
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/settings" className="cursor-pointer">
-                Settings
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
-              Sign out
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </motion.div>
     )
   }
 
-  // Show sign in/up options for unauthenticated users
+  // Show flowing sign in/up options for unauthenticated users
   return (
-    <div className="flex items-center gap-3">
-      <Link
-        href="/auth"
-        className="text-sm text-[color:var(--primary)] font-medium hover:text-[color:var(--primary)]/80 transition-colors"
+    <motion.div 
+      className="flex items-center gap-3"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+    >
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
       >
-        Sign in
-      </Link>
-      <Link
-        href="/auth"
-        className="ml-2 px-3 py-2 rounded-md bg-[color:var(--primary)] text-[color:var(--primary-foreground)] text-sm hover:bg-[color:var(--primary)]/90 transition-colors"
+        <Link
+          href="/auth"
+          className="px-5 py-2.5 text-sm font-semibold text-teal-600 hover:text-teal-700 hover:bg-teal-50 rounded-2xl transition-all duration-500"
+        >
+          Sign in
+        </Link>
+      </motion.div>
+      <motion.div
+        whileHover={{ scale: 1.08, y: -2 }}
+        whileTap={{ scale: 0.92 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
       >
-        Get started
-      </Link>
-    </div>
+        <Link
+          href="/auth"
+          className="px-6 py-2.5 bg-gradient-to-r from-teal-400 to-teal-500 hover:from-teal-500 hover:to-teal-600 text-white text-sm font-bold rounded-2xl shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transition-all duration-500"
+        >
+          Get started
+        </Link>
+      </motion.div>
+    </motion.div>
   )
 }
