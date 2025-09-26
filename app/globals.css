@@ -94,8 +94,8 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
   --card: oklch(0.208 0.042 265.755);
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
@@ -134,5 +134,40 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  .bg-grid {
+    background-image: linear-gradient(to right, rgba(203, 213, 225, 0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(203, 213, 225, 0.5) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .dark .bg-grid {
+    background-image: linear-gradient(to right, rgba(51, 65, 85, 0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(51, 65, 85, 0.5) 1px, transparent 1px);
+  }
+}
+
+/* Sidebar smooth transitions */
+@layer components {
+  .sidebar-layout {
+    transition: margin-left 300ms ease-in-out;
+  }
+  
+  /* Ensure sidebar doesn't overlap content */
+  [data-sidebar="sidebar"] {
+    transition: width 300ms ease-in-out, transform 300ms ease-in-out;
+  }
+  
+  /* Content area adjustment */
+  [data-sidebar="content"] {
+    transition: margin-left 300ms ease-in-out, width 300ms ease-in-out;
+  }
+  
+  /* Mobile sidebar overlay */
+  @media (max-width: 768px) {
+    [data-sidebar="sidebar"] {
+      transform: translateX(-100%);
+    }
+    
+    [data-sidebar="sidebar"][data-state="open"] {
+      transform: translateX(0);
+    }
   }
 }

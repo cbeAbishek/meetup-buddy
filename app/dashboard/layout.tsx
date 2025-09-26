@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import React from "react";
 import { ProtectedRoute } from "@/components/protected-route";
+import { AppLayout } from "@/components/app-layout";
 
 export const metadata: Metadata = {
   title: "Dashboard - Meetup Buddy",
@@ -15,9 +16,9 @@ export default function DashboardLayout({
 }>) {
   return (
     <ProtectedRoute>
-      <div className="dashboard-layout">
+      <AppLayout>
         {children}
-      </div>
+      </AppLayout>
     </ProtectedRoute>
   );
 }

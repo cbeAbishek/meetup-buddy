@@ -1,0 +1,33 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="600" rx="20" fill="#F3F4F6"/>
+<rect x="250" y="100" width="700" height="400" rx="12" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+
+<rect x="280" y="130" width="200" height="24" rx="6" fill="#E5E7EB"/>
+
+<g>
+    <rect x="280" y="180" width="640" height="50" rx="8" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <path d="M300 195 L310 205 L300 215" stroke="#9CA3AF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="325" y="207.5" font-family="sans-serif" font-size="14" fill="#4B5563">project-brief.pdf</text>
+    <text x="880" y="207.5" font-family="sans-serif" font-size="14" fill="#6B7280" text-anchor="end">1.2MB</text>
+</g>
+
+<g>
+    <rect x="280" y="245" width="640" height="50" rx="8" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <path d="M300 260 L310 270 L300 280" stroke="#9CA3AF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="325" y="272.5" font-family="sans-serif" font-size="14" fill="#4B5563">meeting-notes.docx</text>
+    <text x="880" y="272.5" font-family="sans-serif" font-size="14" fill="#6B7280" text-anchor="end">340KB</text>
+</g>
+
+<g>
+    <rect x="280" y="310" width="640" height="50" rx="8" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <path d="M300 325 L310 335 L300 345" stroke="#9CA3AF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="325" y="337.5" font-family="sans-serif" font-size="14" fill="#4B5563">sales-data.csv</text>
+    <text x="880" y="337.5" font-family="sans-serif" font-size="14" fill="#6B7280" text-anchor="end">8.9MB</text>
+</g>
+
+<rect x="280" y="400" width="180" height="40" rx="8" fill="#20C997"/>
+<text x="370" y="425" font-family="sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Upload File</text>
+<path d="M335 412 L335 428 M327 420 L343 420" stroke="white" stroke-width="2" stroke-linecap="round"/>
+
+<text x="600" y="70" font-family="sans-serif" font-size="24" fill="#4B5563" text-anchor="middle" font-weight="bold">Secure Document Sharing</text>
+</svg>

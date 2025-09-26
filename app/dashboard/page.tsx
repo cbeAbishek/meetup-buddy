@@ -24,7 +24,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Meetings</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="h-4 w-4 text-teal-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -37,7 +37,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Groups</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-teal-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -50,7 +50,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Messages</CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            <MessageSquare className="h-4 w-4 text-teal-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0</div>
@@ -63,7 +63,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Meeting Hours</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <Clock className="h-4 w-4 text-teal-600" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">0h</div>
@@ -126,33 +126,33 @@ export default function DashboardPage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Button 
               variant="outline" 
-              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-blue-50 dark:hover:bg-blue-950"
+              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-teal-50 dark:hover:bg-teal-950 border-teal-200 dark:border-teal-700"
             >
-              <Calendar className="h-6 w-6 text-blue-500" />
+              <Calendar className="h-6 w-6 text-teal-500" />
               <span className="text-sm font-medium">Schedule Meeting</span>
             </Button>
             
             <Button 
               variant="outline" 
-              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-green-50 dark:hover:bg-green-950"
+              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-teal-50 dark:hover:bg-teal-950 border-teal-200 dark:border-teal-700"
             >
-              <Users className="h-6 w-6 text-green-500" />
+              <Users className="h-6 w-6 text-teal-500" />
               <span className="text-sm font-medium">Create Group</span>
             </Button>
             
             <Button 
               variant="outline" 
-              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-purple-50 dark:hover:bg-purple-950"
+              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-teal-50 dark:hover:bg-teal-950 border-teal-200 dark:border-teal-700"
             >
-              <MessageSquare className="h-6 w-6 text-purple-500" />
+              <MessageSquare className="h-6 w-6 text-teal-500" />
               <span className="text-sm font-medium">Send Message</span>
             </Button>
             
             <Button 
               variant="outline" 
-              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-orange-50 dark:hover:bg-orange-950"
+              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-teal-50 dark:hover:bg-teal-950 border-teal-200 dark:border-teal-700"
             >
-              <Settings className="h-6 w-6 text-orange-500" />
+              <Settings className="h-6 w-6 text-teal-500" />
               <span className="text-sm font-medium">View Settings</span>
             </Button>
           </div>
