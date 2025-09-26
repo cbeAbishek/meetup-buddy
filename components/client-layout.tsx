@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { AuthNavigation } from '@/components/auth-navigation'
 import { useSessionPersistence } from '@/hooks/use-session-persistence'
 
@@ -34,12 +35,12 @@ export function ClientLayout({ children }: ClientLayoutProps) {
               >
                 Pricing
               </a>
-              <a
+              <Link
+                href="/contact"
                 className="hover:text-[color:var(--primary)] transition-colors"
-                href="#contact"
               >
                 Contact
-              </a>
+              </Link>
             </nav>
           </div>
 
@@ -49,12 +50,7 @@ export function ClientLayout({ children }: ClientLayoutProps) {
 
       <main className="min-h-screen">{children}</main>
 
-      {/* Simple footer for consistent layout */}
-      <footer className="border-t bg-white">
-        <div className="container mx-auto px-6 py-6 text-sm text-slate-600 text-center">
-          © {new Date().getFullYear()} Meetup Buddy. All rights reserved.
-        </div>
-      </footer>
+      {/* footer moved to RootLayout for consistency across pages */}
     </>
   )
 }
