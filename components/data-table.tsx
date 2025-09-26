@@ -401,6 +401,17 @@ export function DataTable({
     }
   }
 
+  // Defensive local references: some TanStack row models may be undefined
+  // briefly during renders; normalize to empty arrays to avoid runtime errors
+  const _rowModel = table.getRowModel?.() as { rows?: any[] } | undefined
+  const rows = _rowModel?.rows ?? []
+
+  const _filteredRowModel = table.getFilteredRowModel?.() as { rows?: any[] } | undefined
+  const filteredRows = _filteredRowModel?.rows ?? []
+
+  const _filteredSelectedRowModel = table.getFilteredSelectedRowModel?.() as { rows?: any[] } | undefined
+  const filteredSelectedRows = _filteredSelectedRowModel?.rows ?? []
+
   return (
     <Tabs
       defaultValue="outline"
@@ -507,12 +518,12 @@ export function DataTable({
                 ))}
               </TableHeader>
               <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                {table.getRowModel().rows?.length ? (
+                {rows.length ? (
                   <SortableContext
                     items={dataIds}
                     strategy={verticalListSortingStrategy}
                   >
-                    {table.getRowModel().rows.map((row) => (
+                    {rows.map((row) => (
                       <DraggableRow key={row.id} row={row} />
                     ))}
                   </SortableContext>
@@ -532,8 +543,8 @@ export function DataTable({
         </div>
         <div className="flex items-center justify-between px-4">
           <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {filteredSelectedRows.length} of{" "}
+            {filteredRows.length} row(s) selected.
           </div>
           <div className="flex w-full items-center gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">

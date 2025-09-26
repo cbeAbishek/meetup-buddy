@@ -1,181 +1,247 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react"
+  LayoutDashboard,
+  Notebook,
+  Calendar,
+  ListTodo,
+  Bell,
+  Archive,
+  Settings,
+  Search,
+  HelpCircle,
+  ChevronRight,
+  ChevronLeft,
+  Menu
+} from "lucide-react"
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
 } from "@/components/ui/sidebar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip"
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+// Navigation items configuration - meeting focused items
+const navigationItems = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    href: "/dashboard",
+    description: "Overview with meeting metrics, trust score, reminders"
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
-    },
-    {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
+  {
+    title: "Agenda",
+    icon: Notebook,
+    href: "/dashboard/agenda",
+    description: "Pre-meeting prep, past notes, sales highlights"
+  },
+  {
+    title: "Scheduling",
+    icon: Calendar,
+    href: "/dashboard/scheduling",
+    description: "Auto-find best slots, calendar integration"
+  },
+  {
+    title: "Follow-ups",
+    icon: ListTodo,
+    href: "/dashboard/follow-ups",
+    description: "Track tasks, decisions, status"
+  },
+  {
+    title: "Reminders",
+    icon: Bell,
+    href: "/dashboard/reminders",
+    description: "Upcoming deadlines and action alerts"
+  },
+  {
+    title: "Data Library",
+    icon: Archive,
+    href: "/dashboard/data-library",
+    description: "Past meetings, sales records, notes"
+  }
+]
+
+// Footer items
+const footerItems = [
+  {
+    title: "Settings",
+    icon: Settings,
+    href: "/settings",
+    description: "Account and profile configuration"
+  },
+  {
+    title: "Search",
+    icon: Search,
+    href: "/search",
+    description: "Find content across the app"
+  },
+  {
+    title: "Get Help",
+    icon: HelpCircle,
+    href: "/help",
+    description: "Support and documentation"
+  }
+]
+
+// SidebarItem component for individual navigation items
+interface SidebarItemProps {
+  icon: React.ElementType
+  title: string
+  href: string
+  description?: string
+  isActive?: boolean
+  isCollapsed: boolean
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+function SidebarItem({ icon: Icon, title, href, description, isActive, isCollapsed }: SidebarItemProps) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
-      </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
-    </Sidebar>
+    <SidebarMenuItem>
+      {isCollapsed ? (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SidebarMenuButton asChild className={cn("h-9 w-9", isActive && "bg-primary text-primary-foreground")}>
+                <Link href={href}>
+                  <Icon className="h-5 w-5" />
+                  <span className="sr-only">{title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="border-none bg-primary/90 text-primary-foreground">
+              <div>
+                <p className="font-medium">{title}</p>
+                {description && <p className="text-xs opacity-75">{description}</p>}
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      ) : (
+        <SidebarMenuButton asChild className={cn("justify-start", isActive && "bg-primary text-primary-foreground")}>
+          <Link href={href}>
+            <Icon className="mr-2 h-5 w-5" />
+            <span>{title}</span>
+          </Link>
+        </SidebarMenuButton>
+      )}
+    </SidebarMenuItem>
+  )
+}
+
+// Main AppSidebar component
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [isCollapsed, setIsCollapsed] = React.useState(false)
+  const isMobile = useIsMobile()
+  const pathname = usePathname()
+  
+  // Handle mobile view state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
+
+  return (
+    <>
+      {/* Mobile menu button - only shown on mobile */}
+      {isMobile && (
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="fixed top-4 left-4 z-50 md:hidden"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      )}
+      
+      {/* Sidebar component - visible based on state and device */}
+      <Sidebar
+        className={cn(
+          "border-r transition-all duration-300",
+          isCollapsed ? "w-[68px]" : "w-[240px]",
+          isMobile && !isMobileMenuOpen ? "hidden" : "block",
+          isMobile && isMobileMenuOpen ? "absolute inset-y-0 left-0 z-40" : ""
+        )}
+        {...props}
+      >
+        <SidebarHeader className="p-2">
+          <div className="flex items-center justify-between px-3 py-2">
+            {!isCollapsed && <h2 className="text-lg font-semibold">Meeting Buddy</h2>}
+            
+            {/* Toggle button for collapsing sidebar - hidden on mobile */}
+            {!isMobile && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+              </Button>
+            )}
+          </div>
+        </SidebarHeader>
+        
+        <SidebarContent className="p-2">
+          <SidebarMenu>
+            {/* Main navigation items */}
+            {navigationItems.map((item) => (
+              <SidebarItem
+                key={item.href}
+                icon={item.icon}
+                title={item.title}
+                href={item.href}
+                description={item.description}
+                isActive={pathname === item.href}
+                isCollapsed={isCollapsed}
+              />
+            ))}
+          </SidebarMenu>
+          
+          {/* Spacer */}
+          <div className="my-4" />
+          
+          {/* Footer navigation items */}
+          <SidebarMenu>
+            {footerItems.map((item) => (
+              <SidebarItem
+                key={item.href}
+                icon={item.icon}
+                title={item.title}
+                href={item.href}
+                description={item.description}
+                isActive={pathname === item.href}
+                isCollapsed={isCollapsed}
+              />
+            ))}
+          </SidebarMenu>
+        </SidebarContent>
+        
+        <SidebarFooter className="p-2">
+          {/* User profile could be added here */}
+        </SidebarFooter>
+      </Sidebar>
+      
+      {/* Overlay to close mobile menu when clicking outside */}
+      {isMobile && isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+    </>
   )
 }
