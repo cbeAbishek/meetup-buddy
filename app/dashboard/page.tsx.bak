@@ -6,7 +6,12 @@ import { SiteHeader } from "@/components/site-header"
 import {
   SidebarInset,
   SidebarProvider,
-} from "@/components/ui/sidebar"
+} from "@/co            </main>
+            <RightPanel />
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>s/ui/sidebar"
 import { Navbar } from "@/components/navbar"
 import { Breadcrumb } from "@/components/breadcrumb"
 import { Accordion } from "@/components/ui/accordion"
@@ -23,7 +28,11 @@ import { ProtectedRoute } from "@/components/protected-route"
 import data from "./data.json"
 
 export default function Page() {
-  return <DashboardContent />
+  return (
+    <ProtectedRoute>
+      <DashboardContent />
+    </ProtectedRoute>
+  )
 }
 
 function DashboardContent() {
@@ -370,7 +379,8 @@ function DashboardContent() {
                 </TabsContent>
               </Tabs>
             </div>
-            </main>
+          </main>
+          </div>
             <RightPanel />
           </div>
         </div>
