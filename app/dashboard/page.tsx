@@ -35,32 +35,21 @@ function DashboardContent() {
     <SidebarProvider
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-          // teal-600 theme overrides for dashboard
-          "--primary": "#0d9488", // tailwind teal-600
-          "--primary-foreground": "#ffffff",
-          "--accent": "#0d9488",
-          "--accent-foreground": "#ffffff",
-          "--sidebar-primary": "#0d9488",
+          "--sidebar-width": "16rem",
+          "--sidebar-width-icon": "3rem",
+          "--sidebar-primary": "#0d9488", // tailwind teal-600
           "--sidebar-primary-foreground": "#ffffff",
           "--sidebar-accent": "#0d9488",
           "--sidebar-accent-foreground": "#ffffff",
-          "--ring": "#5eead4",
-          "--chart-1": "#0d9488",
-          "--chart-2": "#0891b2",
-          "--chart-3": "#06b6d4",
-          "--chart-4": "#34d399",
-          "--chart-5": "#99f6e4",
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
-      <SidebarInset className="bg-slate-50 dark:bg-slate-950">
+      <AppSidebar />
+      <SidebarInset className="flex flex-col bg-slate-50 dark:bg-slate-950">
         <Navbar />
         <SiteHeader />
-        <div className="flex flex-1 gap-6">
-          <main className="flex-1 px-6 py-6">
+        <div className="flex-1 overflow-auto">
+          <main className="p-6">
             <div className="flex items-center justify-between">
               <Breadcrumb items={["Dashboard", "Meeting Overview"]} />
               <div className="flex items-center gap-2">
@@ -387,8 +376,6 @@ function DashboardContent() {
               </Tabs>
             </div>
           </main>
-
-          <RightPanel />
         </div>
       </SidebarInset>
     </SidebarProvider>
