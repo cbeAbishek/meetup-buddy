@@ -1,7 +1,8 @@
-import { supabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function GET(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { searchParams } = new URL(req.url);
     const profileId = searchParams.get("profileId");
     const type = searchParams.get("type"); // 'meeting', 'followup', 'reminder'
@@ -53,6 +54,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const body = await req.json();
     const { profile_id, type, title, message, related_id, scheduled_for } = body;
 
@@ -103,6 +105,7 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const body = await req.json();
     const { id, read, ids } = body;
 
@@ -164,6 +167,7 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { searchParams } = new URL(req.url);
     const notificationId = searchParams.get("id");
 
@@ -199,3 +203,5 @@ export async function DELETE(req: Request) {
     });
   }
 }
+
+

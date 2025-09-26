@@ -1,0 +1,522 @@
+{
+  "info": {
+    "name": "MeetUp Buddy API Complete Collection",
+    "description": "Complete API testing collection for MeetUp Buddy - includes all endpoints with environment variables",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "🏠 Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}",
+          "host": ["{{base_url}}"]
+        },
+        "description": "Test if the server is running"
+      }
+    },
+    {
+      "name": "👤 Profile Management",
+      "item": [
+        {
+          "name": "Get Profile by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/profiles?profileId={{test_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "profiles"],
+              "query": [{"key": "profileId", "value": "{{test_user_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Create Profile",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"full_name\": \"John Doe\",\n  \"avatar_url\": \"https://example.com/avatar.jpg\",\n  \"timezone\": \"America/New_York\",\n  \"preferences\": {\n    \"theme\": \"dark\",\n    \"notifications\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/profiles",
+              "host": ["{{base_url}}"],
+              "path": ["api", "profiles"]
+            },
+            "description": "Create a new user profile. Required: email, full_name. Optional: avatar_url, timezone, preferences"
+          }
+        },
+        {
+          "name": "Create Profile (Minimal - No Avatar)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane.smith@example.com\",\n  \"full_name\": \"Jane Smith\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/profiles",
+              "host": ["{{base_url}}"],
+              "path": ["api", "profiles"]
+            },
+            "description": "Create profile with only required fields - avatar_url is optional"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📅 Calendar Slots",
+      "item": [
+        {
+          "name": "Get User Slots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/slots?profileId={{test_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "slots"],
+              "query": [{"key": "profileId", "value": "{{test_user_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Create Availability Slot",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_id\": \"{{test_user_id}}\",\n  \"start_time\": \"2024-01-15T09:00:00Z\",\n  \"end_time\": \"2024-01-15T17:00:00Z\",\n  \"is_available\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/slots",
+              "host": ["{{base_url}}"],
+              "path": ["api", "slots"]
+            }
+          }
+        },
+        {
+          "name": "Find Multi-User Availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/slots?profileIds={{test_user_id}},{{test_user_2_id}}&findOverlaps=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "slots"],
+              "query": [
+                {"key": "profileIds", "value": "{{test_user_id}},{{test_user_2_id}}"},
+                {"key": "findOverlaps", "value": "true"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🤝 Meetings",
+      "item": [
+        {
+          "name": "Get User Meetings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/meetings?profileId={{test_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "meetings"],
+              "query": [{"key": "profileId", "value": "{{test_user_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Create Meeting",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_id\": \"{{test_user_id}}\",\n  \"meeting_date\": \"2024-01-20T14:00:00Z\",\n  \"topic\": \"Project Planning Session\",\n  \"status\": \"scheduled\",\n  \"duration\": 60\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/meetings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "meetings"]
+            }
+          }
+        },
+        {
+          "name": "Update Meeting",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{test_meeting_id}}\",\n  \"status\": \"completed\",\n  \"outcome\": \"Successful planning session\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/meetings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "meetings"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Participants",
+      "item": [
+        {
+          "name": "Get Meeting Participants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/participants?meetingId={{test_meeting_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "participants"],
+              "query": [{"key": "meetingId", "value": "{{test_meeting_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Add Participant",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meeting_id\": \"{{test_meeting_id}}\",\n  \"profile_id\": \"{{test_user_2_id}}\",\n  \"role\": \"attendee\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/participants",
+              "host": ["{{base_url}}"],
+              "path": ["api", "participants"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "✅ Follow-ups & Tasks",
+      "item": [
+        {
+          "name": "Get Meeting Follow-ups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/followups?meetingId={{test_meeting_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "followups"],
+              "query": [{"key": "meetingId", "value": "{{test_meeting_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Create Follow-up Task",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meeting_id\": \"{{test_meeting_id}}\",\n  \"task\": \"Prepare budget proposal\",\n  \"assigned_to\": \"{{test_user_2_id}}\",\n  \"due_date\": \"2024-01-25T17:00:00Z\",\n  \"status\": \"pending\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/followups",
+              "host": ["{{base_url}}"],
+              "path": ["api", "followups"]
+            }
+          }
+        },
+        {
+          "name": "Update Task Status",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{test_task_id}}\",\n  \"status\": \"completed\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/followups",
+              "host": ["{{base_url}}"],
+              "path": ["api", "followups"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📄 Documents",
+      "item": [
+        {
+          "name": "Get Meeting Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/documents?meetingId={{test_meeting_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "documents"],
+              "query": [{"key": "meetingId", "value": "{{test_meeting_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meeting_id\": \"{{test_meeting_id}}\",\n  \"profile_id\": \"{{test_user_id}}\",\n  \"file_url\": \"https://example.com/document.pdf\",\n  \"file_type\": \"pdf\",\n  \"file_name\": \"Project_Proposal.pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/documents",
+              "host": ["{{base_url}}"],
+              "path": ["api", "documents"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Agenda Generation",
+      "item": [
+        {
+          "name": "Generate Meeting Agenda",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/agenda?meetingId={{test_meeting_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "agenda"],
+              "query": [{"key": "meetingId", "value": "{{test_meeting_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Create Custom Agenda",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meeting_id\": \"{{test_meeting_id}}\",\n  \"agenda_items\": [\"Welcome\", \"Status Update\", \"Next Steps\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/agenda",
+              "host": ["{{base_url}}"],
+              "path": ["api", "agenda"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📝 Meeting Notes",
+      "item": [
+        {
+          "name": "Get Meeting Notes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notes?meetingId={{test_meeting_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notes"],
+              "query": [{"key": "meetingId", "value": "{{test_meeting_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Add Meeting Note",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meeting_id\": \"{{test_meeting_id}}\",\n  \"author_id\": \"{{test_user_id}}\",\n  \"content\": \"Team agreed on project timeline\",\n  \"note_type\": \"decision\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/notes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notes"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔔 Notifications",
+      "item": [
+        {
+          "name": "Get User Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notifications?profileId={{test_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications"],
+              "query": [{"key": "profileId", "value": "{{test_user_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Create Notification",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_id\": \"{{test_user_id}}\",\n  \"type\": \"meeting_reminder\",\n  \"title\": \"Meeting in 15 minutes\",\n  \"message\": \"Project Planning Session starts soon\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications"]
+            }
+          }
+        },
+        {
+          "name": "Mark as Read",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{test_notification_id}}\",\n  \"read\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📄 Templates",
+      "item": [
+        {
+          "name": "Get User Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/templates?profileId={{test_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "templates"],
+              "query": [{"key": "profileId", "value": "{{test_user_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Create Template",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_id\": \"{{test_user_id}}\",\n  \"name\": \"Weekly Standup\",\n  \"description\": \"Standard team meeting template\",\n  \"agenda_template\": [\"Check-ins\", \"Progress\", \"Blockers\", \"Next steps\"],\n  \"default_duration\": 30\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/templates",
+              "host": ["{{base_url}}"],
+              "path": ["api", "templates"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Analytics & Summary",
+      "item": [
+        {
+          "name": "Get Meeting Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/summary?meetingId={{test_meeting_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "summary"],
+              "query": [{"key": "meetingId", "value": "{{test_meeting_id}}"}]
+            }
+          }
+        },
+        {
+          "name": "Get Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard?profileId={{test_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard"],
+              "query": [{"key": "profileId", "value": "{{test_user_id}}"}]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-set timestamps for testing",
+          "const now = new Date();",
+          "const futureDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);",
+          "pm.environment.set('current_timestamp', now.toISOString());",
+          "pm.environment.set('future_date', futureDate.toISOString());"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "test_user_id", 
+      "value": "test-user-123",
+      "type": "string"
+    },
+    {
+      "key": "test_user_2_id",
+      "value": "test-user-456", 
+      "type": "string"
+    },
+    {
+      "key": "test_meeting_id",
+      "value": "test-meeting-abc123",
+      "type": "string"
+    },
+    {
+      "key": "test_task_id",
+      "value": "test-task-def456",
+      "type": "string"
+    },
+    {
+      "key": "test_notification_id",
+      "value": "test-notification-ghi789",
+      "type": "string"
+    }
+  ]
+}

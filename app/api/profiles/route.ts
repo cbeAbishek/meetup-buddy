@@ -1,7 +1,8 @@
-import { supabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function GET(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { searchParams } = new URL(req.url);
     const profileId = searchParams.get("profileId");
     const email = searchParams.get("email");
@@ -50,28 +51,36 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const body = await req.json();
     const { email, full_name, avatar_url, timezone, preferences } = body;
 
     if (!email || !full_name) {
       return new Response(JSON.stringify({ 
-        error: "email and full_name are required" 
+        error: "email and full_name are required (avatar_url is optional)" 
       }), { 
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
+    // Build insert object - avatar_url is optional
+    const insertData: any = {
+      email, 
+      full_name,
+      timezone: timezone || 'UTC',
+      preferences: preferences || {},
+      created_at: new Date().toISOString()
+    };
+
+    // Only add avatar_url if it's provided and not empty
+    if (avatar_url && avatar_url.trim()) {
+      insertData.avatar_url = avatar_url;
+    }
+
     const { data, error } = await supabaseAdmin
       .from("profiles")
-      .insert([{ 
-        email, 
-        full_name, 
-        avatar_url,
-        timezone: timezone || 'UTC',
-        preferences: preferences || {},
-        created_at: new Date().toISOString()
-      }])
+      .insert([insertData])
       .select()
       .single();
 
@@ -98,6 +107,7 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const body = await req.json();
     const { id, full_name, avatar_url, timezone, preferences, notification_settings } = body;
 
@@ -109,11 +119,17 @@ export async function PUT(req: Request) {
     }
 
     const updateData: any = { updated_at: new Date().toISOString() };
+    
+    // Only update provided fields
     if (full_name !== undefined) updateData.full_name = full_name;
-    if (avatar_url !== undefined) updateData.avatar_url = avatar_url;
     if (timezone !== undefined) updateData.timezone = timezone;
     if (preferences !== undefined) updateData.preferences = preferences;
     if (notification_settings !== undefined) updateData.notification_settings = notification_settings;
+    
+    // Handle avatar_url specially - allow setting to null/empty to remove
+    if (avatar_url !== undefined) {
+      updateData.avatar_url = avatar_url && avatar_url.trim() ? avatar_url : null;
+    }
 
     const { data, error } = await supabaseAdmin
       .from("profiles")

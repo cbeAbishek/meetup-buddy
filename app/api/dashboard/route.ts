@@ -1,7 +1,8 @@
-import { supabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function GET(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { searchParams } = new URL(req.url);
     const profileId = searchParams.get("profileId");
     const type = searchParams.get("type"); // 'upcoming', 'overdue', 'completed'

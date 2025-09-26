@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
 
 interface CalendarSlot {
   id?: string;
@@ -23,6 +23,7 @@ interface SupabaseError {
 
 export async function GET(req: Request): Promise<Response> {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { searchParams } = new URL(req.url);
     const profileId = searchParams.get("profileId");
     const profileIds = searchParams.get("profileIds"); // comma-separated for multi-user availability
@@ -96,6 +97,7 @@ export async function GET(req: Request): Promise<Response> {
 
 export async function POST(req: Request): Promise<Response> {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const body = await req.json();
     const { profile_id, start_time, end_time, is_available = true, recurring_pattern } = body;
 
@@ -144,6 +146,7 @@ export async function POST(req: Request): Promise<Response> {
 
 export async function PUT(req: Request): Promise<Response> {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const body = await req.json();
     const { id, start_time, end_time, is_available } = body;
 
@@ -189,6 +192,7 @@ export async function PUT(req: Request): Promise<Response> {
 
 export async function DELETE(req: Request): Promise<Response> {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { searchParams } = new URL(req.url);
     const slotId = searchParams.get("id");
 
@@ -276,3 +280,4 @@ function findOverlappingTimeSlots(slots: CalendarSlot[], profileIds: string[]): 
 
   return overlaps;
 }
+

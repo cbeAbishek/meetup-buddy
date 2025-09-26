@@ -1,7 +1,8 @@
-import { supabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function GET(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { searchParams } = new URL(req.url);
     const meetingId = searchParams.get("meetingId");
 
@@ -41,6 +42,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const body = await req.json();
     const { meeting_id, profile_id, file_url, file_type, file_name, file_size } = body;
 
@@ -90,6 +92,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { searchParams } = new URL(req.url);
     const documentId = searchParams.get("id");
 
