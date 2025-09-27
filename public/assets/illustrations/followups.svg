@@ -1,0 +1,22 @@
+<svg width="1200" height="500" viewBox="0 0 1200 500" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Follow ups illustration">
+  <rect width="1200" height="500" rx="16" fill="#FEFEFF" />
+  <g transform="translate(80,60)">
+    <rect x="0" y="0" width="480" height="360" rx="12" fill="#ffffff" stroke="#EEF2FF" />
+    <text x="24" y="36" fill="#0f172a" font-size="18" font-family="Inter, sans-serif">Follow-ups</text>
+    <g transform="translate(24,64)">
+      <rect x="0" y="0" width="420" height="56" rx="8" fill="#fff7ed" stroke="#ffedd5" />
+      <text x="16" y="34" fill="#92400e" font-size="14">Send meeting notes — due in 2d</text>
+    </g>
+    <g transform="translate(24,136)">
+      <rect x="0" y="0" width="420" height="56" rx="8" fill="#eff6ff" stroke="#dbeafe" />
+      <text x="16" y="34" fill="#1e293b" font-size="14">Assign owners — due tomorrow</text>
+    </g>
+  </g>
+  <g transform="translate(600,60)">
+    <rect x="0" y="0" width="480" height="360" rx="12" fill="#ffffff" stroke="#E6EEF0" />
+    <text x="24" y="36" fill="#0f172a" font-size="18">Progress</text>
+    <rect x="24" y="64" width="360" height="12" rx="6" fill="#e6fdf6" />
+    <rect x="24" y="64" width="220" height="12" rx="6" fill="#20c997" />
+    <text x="24" y="100" fill="#334155" font-size="14">3 of 5 follow-ups completed</text>
+  </g>
+</svg>
