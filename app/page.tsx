@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import React, { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,17 +21,7 @@ import { Integrations } from "@/components/sections/integrations";
 import { DocumentsAndAttachments } from "@/components/sections/documents-and-attachments";
 import { SponsorsAndCollaboration } from "@/components/sections/sponsors-and-collaboration";
 import { GetStartedCTA } from "@/components/sections/get-started-cta";
-import {PlatformShowcase} from "@/components/platform-showcase";
-import { FeaturesOverview } from "@/components/sections/features-overview";
-import { AgendaAndNotes } from "@/components/sections/agenda-and-notes";
-import { ConflictFreeScheduling } from "@/components/sections/conflict-free-scheduling";
-import { CollaborationDashboard } from "@/components/sections/collaboration-dashboard";
-import { FollowupsAndTasks } from "@/components/sections/followups-and-tasks";
-import { Integrations } from "@/components/sections/integrations";
-import { DocumentsAndAttachments } from "@/components/sections/documents-and-attachments";
-import { SponsorsAndCollaboration } from "@/components/sections/sponsors-and-collaboration";
-import { GetStartedCTA } from "@/components/sections/get-started-cta";
-import {PlatformShowcase} from "@/components/platform-showcase";
+import { PlatformShowcase } from "@/components/platform-showcase";
 
 export default function Page() {
   return (
