@@ -1,0 +1,154 @@
+{
+  "meetings": [
+    {
+      "id": "meeting1",
+      "title": "Product Roadmap Q4 Planning",
+      "description": "Quarterly planning session to define product priorities and resource allocation for Q4 2025",
+      "startTime": "2025-09-28T14:00:00Z",
+      "endTime": "2025-09-28T15:30:00Z",
+      "status": "scheduled",
+      "type": "planning",
+      "location": "Conference Room A",
+      "organizer": "Alice Chen",
+      "participants": [
+        { "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "name": "Bob Smith", "avatar": "BS", "status": "accepted" },
+        { "name": "Carol Jones", "avatar": "CJ", "status": "pending" },
+        { "name": "David Lee", "avatar": "DL", "status": "accepted" },
+        { "name": "Emily Wong", "avatar": "EW", "status": "tentative" }
+      ],
+      "agenda": [
+        "Q3 Review & Key Metrics",
+        "Q4 Feature Prioritization", 
+        "Resource Planning",
+        "Risk Assessment & Mitigation"
+      ],
+      "tags": ["planning", "quarterly", "roadmap"]
+    },
+    {
+      "id": "meeting2",
+      "title": "Daily Standup - Team Alpha",
+      "description": "Daily sync to discuss progress, blockers, and priorities",
+      "startTime": "2025-09-28T09:00:00Z",
+      "endTime": "2025-09-28T09:30:00Z",
+      "status": "scheduled",
+      "type": "standup",
+      "location": "Virtual Meeting",
+      "organizer": "Bob Smith",
+      "participants": [
+        { "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "name": "Bob Smith", "avatar": "BS", "status": "accepted" },
+        { "name": "Carol Jones", "avatar": "CJ", "status": "accepted" },
+        { "name": "David Lee", "avatar": "DL", "status": "accepted" }
+      ],
+      "agenda": [
+        "Yesterday's Accomplishments",
+        "Today's Goals", 
+        "Blockers & Dependencies"
+      ],
+      "tags": ["standup", "daily", "team-alpha"]
+    },
+    {
+      "id": "meeting3",
+      "title": "Client Onboarding: TechCorp Inc",
+      "description": "Initial onboarding session for our new enterprise client",
+      "startTime": "2025-09-28T16:00:00Z",
+      "endTime": "2025-09-28T17:00:00Z",
+      "status": "scheduled",
+      "type": "client",
+      "location": "Virtual Meeting",
+      "organizer": "Frank Martinez",
+      "participants": [
+        { "name": "Frank Martinez", "avatar": "FM", "status": "accepted" },
+        { "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "name": "Emily Wong", "avatar": "EW", "status": "accepted" }
+      ],
+      "agenda": [
+        "Welcome & Introductions",
+        "Platform Demo & Walkthrough",
+        "Implementation Timeline",
+        "Q&A and Next Steps"
+      ],
+      "tags": ["client", "onboarding", "demo"]
+    },
+    {
+      "id": "meeting4",
+      "title": "Design System Review & Updates",
+      "description": "Monthly review of design system updates and component library changes",
+      "startTime": "2025-09-29T15:00:00Z",
+      "endTime": "2025-09-29T16:00:00Z",
+      "status": "scheduled",
+      "type": "review",
+      "location": "Design Studio",
+      "organizer": "Carol Jones",
+      "participants": [
+        { "name": "Carol Jones", "avatar": "CJ", "status": "accepted" },
+        { "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "name": "Emily Wong", "avatar": "EW", "status": "pending" }
+      ],
+      "agenda": [
+        "Component Library Updates",
+        "Usage Analytics & Adoption",
+        "Upcoming Changes & Roadmap",
+        "Team Feedback & Requests"
+      ],
+      "tags": ["design", "review", "monthly"]
+    }
+  ],
+  "followUps": [
+    {
+      "id": "followup1",
+      "meetingId": "meeting1",
+      "title": "Finalize Q4 budget allocation",
+      "assignee": "Alice Chen",
+      "dueDate": "2025-09-30T17:00:00Z",
+      "status": "pending",
+      "priority": "high"
+    },
+    {
+      "id": "followup2", 
+      "meetingId": "meeting1",
+      "title": "Update engineering hiring plan",
+      "assignee": "Bob Smith",
+      "dueDate": "2025-10-01T23:59:59Z",
+      "status": "in-progress",
+      "priority": "high"
+    },
+    {
+      "id": "followup3",
+      "meetingId": "meeting3", 
+      "title": "Send TechCorp welcome package",
+      "assignee": "Emily Wong",
+      "dueDate": "2025-09-29T12:00:00Z",
+      "status": "completed",
+      "priority": "medium"
+    },
+    {
+      "id": "followup4",
+      "meetingId": "meeting4",
+      "title": "Update Storybook documentation",
+      "assignee": "Carol Jones", 
+      "dueDate": "2025-10-05T23:59:59Z",
+      "status": "pending",
+      "priority": "medium"
+    }
+  ],
+  "notes": [
+    {
+      "id": "note1",
+      "meetingId": "meeting1",
+      "title": "Q4 Roadmap Planning - Key Decisions",
+      "content": "Key Decisions Made:\n\n1. Mobile App Priority: Prioritize mobile app performance improvements\n2. Feature Delays: Advanced analytics pushed to Q1 2026\n3. Performance Focus: 30% engineering capacity for performance\n\nAction Items:\n- Alice: Research mobile usage patterns\n- Bob: Benchmark competitor performance\n- Team: Estimate improvement efforts\n\nRisks:\n- Resource constraints may impact timeline\n- Third-party API dependencies\n- Market competition",
+      "createdBy": "Alice Chen",
+      "createdAt": "2025-09-27T16:00:00Z"
+    },
+    {
+      "id": "note2",
+      "meetingId": "meeting3",
+      "title": "TechCorp Onboarding - Requirements",
+      "content": "Client Background:\n- 500+ employees, manufacturing industry\n- Legacy CRM system (10+ years old)\n- Budget: $150K implementation + $50K annual\n\nKey Requirements:\n- SSO with Azure AD\n- 2.5M customer record migration\n- Custom branding\n- 24/7 support during migration\n\nNext Steps:\n1. Technical requirements call\n2. Security review\n3. Data migration assessment\n4. Contract finalization",
+      "createdBy": "Frank Martinez", 
+      "createdAt": "2025-09-28T16:30:00Z"
+    }
+  ]
+}

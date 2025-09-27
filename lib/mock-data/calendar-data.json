@@ -1,0 +1,428 @@
+{
+  "meetings": [
+    {
+      "id": "cal_meeting_1",
+      "title": "Product Roadmap Q4 Planning",
+      "description": "Quarterly planning session to define product priorities and resource allocation",
+      "startTime": "2025-09-30T14:00:00Z",
+      "endTime": "2025-09-30T15:30:00Z",
+      "date": "2025-09-30",
+      "status": "scheduled",
+      "type": "planning",
+      "location": "Conference Room A",
+      "meetingUrl": "https://meet.google.com/product-roadmap-q4",
+      "organizer": {
+        "id": "user1",
+        "name": "Alice Chen",
+        "avatar": "AC"
+      },
+      "participants": [
+        { "id": "user1", "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "id": "user2", "name": "Bob Smith", "avatar": "BS", "status": "accepted" },
+        { "id": "user3", "name": "Carol Jones", "avatar": "CJ", "status": "pending" },
+        { "id": "user4", "name": "David Lee", "avatar": "DL", "status": "accepted" }
+      ],
+      "color": "#3B82F6",
+      "priority": "high"
+    },
+    {
+      "id": "cal_meeting_2",
+      "title": "Daily Standup - Team Alpha",
+      "description": "Daily sync to discuss progress, blockers, and priorities",
+      "startTime": "2025-09-30T09:00:00Z",
+      "endTime": "2025-09-30T09:30:00Z",
+      "date": "2025-09-30",
+      "status": "scheduled",
+      "type": "standup",
+      "location": "Virtual Meeting",
+      "meetingUrl": "https://zoom.us/j/daily-standup",
+      "organizer": {
+        "id": "user2",
+        "name": "Bob Smith",
+        "avatar": "BS"
+      },
+      "participants": [
+        { "id": "user1", "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "id": "user2", "name": "Bob Smith", "avatar": "BS", "status": "accepted" },
+        { "id": "user3", "name": "Carol Jones", "avatar": "CJ", "status": "accepted" }
+      ],
+      "color": "#10B981",
+      "priority": "medium",
+      "recurring": true
+    },
+    {
+      "id": "cal_meeting_3",
+      "title": "Client Demo: TechStart Solutions",
+      "description": "Product demonstration for potential new client",
+      "startTime": "2025-10-01T15:00:00Z",
+      "endTime": "2025-10-01T16:00:00Z",
+      "date": "2025-10-01",
+      "status": "scheduled",
+      "type": "client",
+      "location": "Virtual Meeting",
+      "meetingUrl": "https://teams.microsoft.com/client-demo",
+      "organizer": {
+        "id": "user6",
+        "name": "Frank Martinez",
+        "avatar": "FM"
+      },
+      "participants": [
+        { "id": "user6", "name": "Frank Martinez", "avatar": "FM", "status": "accepted" },
+        { "id": "user1", "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "id": "user5", "name": "Emily Wong", "avatar": "EW", "status": "accepted" }
+      ],
+      "color": "#8B5CF6",
+      "priority": "high"
+    },
+    {
+      "id": "cal_meeting_4",
+      "title": "Design System Review",
+      "description": "Monthly review of design system updates",
+      "startTime": "2025-10-01T10:00:00Z",
+      "endTime": "2025-10-01T11:00:00Z",
+      "date": "2025-10-01",
+      "status": "scheduled",
+      "type": "review",
+      "location": "Design Studio",
+      "organizer": {
+        "id": "user3",
+        "name": "Carol Jones",
+        "avatar": "CJ"
+      },
+      "participants": [
+        { "id": "user3", "name": "Carol Jones", "avatar": "CJ", "status": "accepted" },
+        { "id": "user1", "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "id": "user5", "name": "Emily Wong", "avatar": "EW", "status": "pending" }
+      ],
+      "color": "#EC4899",
+      "priority": "medium"
+    },
+    {
+      "id": "cal_meeting_5",
+      "title": "Sprint Planning",
+      "description": "Plan tasks and stories for the upcoming sprint",
+      "startTime": "2025-10-02T13:00:00Z",
+      "endTime": "2025-10-02T15:00:00Z",
+      "date": "2025-10-02",
+      "status": "scheduled",
+      "type": "planning",
+      "location": "Conference Room B",
+      "organizer": {
+        "id": "user2",
+        "name": "Bob Smith",
+        "avatar": "BS"
+      },
+      "participants": [
+        { "id": "user1", "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "id": "user2", "name": "Bob Smith", "avatar": "BS", "status": "accepted" },
+        { "id": "user3", "name": "Carol Jones", "avatar": "CJ", "status": "accepted" },
+        { "id": "user4", "name": "David Lee", "avatar": "DL", "status": "accepted" }
+      ],
+      "color": "#F59E0B",
+      "priority": "high"
+    },
+    {
+      "id": "cal_meeting_6",
+      "title": "Weekly One-on-One",
+      "description": "Weekly check-in with team lead",
+      "startTime": "2025-10-03T16:00:00Z",
+      "endTime": "2025-10-03T16:30:00Z",
+      "date": "2025-10-03",
+      "status": "scheduled",
+      "type": "one-on-one",
+      "location": "Alice's Office",
+      "organizer": {
+        "id": "user1",
+        "name": "Alice Chen",
+        "avatar": "AC"
+      },
+      "participants": [
+        { "id": "user1", "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "id": "user2", "name": "Bob Smith", "avatar": "BS", "status": "accepted" }
+      ],
+      "color": "#6366F1",
+      "priority": "medium",
+      "recurring": true
+    },
+    {
+      "id": "cal_meeting_7",
+      "title": "All Hands Meeting",
+      "description": "Company-wide monthly update meeting",
+      "startTime": "2025-10-04T10:00:00Z",
+      "endTime": "2025-10-04T11:00:00Z",
+      "date": "2025-10-04",
+      "status": "scheduled",
+      "type": "all-hands",
+      "location": "Main Auditorium",
+      "meetingUrl": "https://stream.company.com/all-hands",
+      "organizer": {
+        "id": "ceo",
+        "name": "Sarah Johnson",
+        "avatar": "SJ"
+      },
+      "participants": [
+        { "id": "user1", "name": "Alice Chen", "avatar": "AC", "status": "accepted" },
+        { "id": "user2", "name": "Bob Smith", "avatar": "BS", "status": "accepted" },
+        { "id": "user3", "name": "Carol Jones", "avatar": "CJ", "status": "accepted" },
+        { "id": "user4", "name": "David Lee", "avatar": "DL", "status": "accepted" },
+        { "id": "user5", "name": "Emily Wong", "avatar": "EW", "status": "accepted" },
+        { "id": "user6", "name": "Frank Martinez", "avatar": "FM", "status": "accepted" }
+      ],
+      "color": "#DC2626",
+      "priority": "high"
+    },
+    {
+      "id": "cal_meeting_8",
+      "title": "Engineering Deep Dive",
+      "description": "Technical architecture discussion",
+      "startTime": "2025-10-04T14:30:00Z",
+      "endTime": "2025-10-04T16:00:00Z",
+      "date": "2025-10-04",
+      "status": "scheduled",
+      "type": "technical",
+      "location": "Engineering Pod",
+      "organizer": {
+        "id": "user2",
+        "name": "Bob Smith",
+        "avatar": "BS"
+      },
+      "participants": [
+        { "id": "user2", "name": "Bob Smith", "avatar": "BS", "status": "accepted" },
+        { "id": "user4", "name": "David Lee", "avatar": "DL", "status": "accepted" }
+      ],
+      "color": "#059669",
+      "priority": "medium"
+    }
+  ],
+  "events": [
+    {
+      "id": "event_1",
+      "title": "Team Lunch",
+      "description": "Monthly team building lunch",
+      "startTime": "2025-09-30T12:00:00Z",
+      "endTime": "2025-09-30T13:30:00Z",
+      "date": "2025-09-30",
+      "type": "social",
+      "location": "Downtown Bistro",
+      "color": "#F97316",
+      "allDay": false
+    },
+    {
+      "id": "event_2",
+      "title": "Company Holiday",
+      "description": "National holiday - office closed",
+      "startTime": "2025-10-02T00:00:00Z",
+      "endTime": "2025-10-02T23:59:59Z",
+      "date": "2025-10-02",
+      "type": "holiday",
+      "location": "",
+      "color": "#EF4444",
+      "allDay": true
+    },
+    {
+      "id": "event_3",
+      "title": "Product Launch Event",
+      "description": "Q4 product features launch event",
+      "startTime": "2025-10-03T09:00:00Z",
+      "endTime": "2025-10-03T17:00:00Z",
+      "date": "2025-10-03",
+      "type": "company",
+      "location": "Convention Center",
+      "color": "#7C3AED",
+      "allDay": false
+    },
+    {
+      "id": "event_4",
+      "title": "Hackathon Kickoff",
+      "description": "48-hour company hackathon begins",
+      "startTime": "2025-10-04T18:00:00Z",
+      "endTime": "2025-10-04T19:00:00Z",
+      "date": "2025-10-04",
+      "type": "hackathon",
+      "location": "Innovation Lab",
+      "color": "#0891B2",
+      "allDay": false
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2025-09-29",
+      "meetings": [],
+      "events": [],
+      "dayType": "weekend"
+    },
+    {
+      "date": "2025-09-30",
+      "meetings": ["cal_meeting_1", "cal_meeting_2"],
+      "events": ["event_1"],
+      "dayType": "workday",
+      "busyHours": 2.5
+    },
+    {
+      "date": "2025-10-01",
+      "meetings": ["cal_meeting_3", "cal_meeting_4"],
+      "events": [],
+      "dayType": "workday",
+      "busyHours": 2.0
+    },
+    {
+      "date": "2025-10-02",
+      "meetings": ["cal_meeting_5"],
+      "events": ["event_2"],
+      "dayType": "holiday",
+      "busyHours": 2.0
+    },
+    {
+      "date": "2025-10-03",
+      "meetings": ["cal_meeting_6"],
+      "events": ["event_3"],
+      "dayType": "workday",
+      "busyHours": 8.5
+    },
+    {
+      "date": "2025-10-04",
+      "meetings": ["cal_meeting_7", "cal_meeting_8"],
+      "events": ["event_4"],
+      "dayType": "workday",
+      "busyHours": 3.5
+    },
+    {
+      "date": "2025-10-05",
+      "meetings": [],
+      "events": [],
+      "dayType": "weekend"
+    },
+    {
+      "date": "2025-10-06",
+      "meetings": [],
+      "events": [],
+      "dayType": "weekend"
+    }
+  ],
+  "analytics": {
+    "thisWeek": {
+      "totalMeetings": 8,
+      "totalHours": 12.5,
+      "averageDuration": 94,
+      "participants": 15,
+      "virtualMeetings": 5
+    },
+    "thisMonth": {
+      "totalMeetings": 42,
+      "totalHours": 67.5,
+      "averageDuration": 96,
+      "participants": 89,
+      "virtualMeetings": 28
+    },
+    "meetingTypes": {
+      "planning": 25,
+      "standup": 35,
+      "client": 15,
+      "review": 15,
+      "one-on-one": 10
+    },
+    "busyHours": {
+      "morning": 8.5,
+      "afternoon": 12.0,
+      "evening": 2.0
+    },
+    "peakDays": ["Tuesday", "Wednesday", "Thursday"]
+  },
+  "upcomingMeetings": [
+    {
+      "id": "upcoming-1",
+      "title": "Sprint Retrospective",
+      "startTime": "2024-01-08T10:00:00",
+      "type": "review",
+      "participants": 6,
+      "isToday": true,
+      "timeUntil": "in 2 hours"
+    },
+    {
+      "id": "upcoming-2", 
+      "title": "Product Roadmap Planning",
+      "startTime": "2024-01-09T14:00:00",
+      "type": "planning",
+      "participants": 8,
+      "isToday": false,
+      "timeUntil": "tomorrow"
+    },
+    {
+      "id": "upcoming-3",
+      "title": "1:1 with Engineering Manager",
+      "startTime": "2024-01-09T16:30:00",
+      "type": "one-on-one", 
+      "participants": 2,
+      "isToday": false,
+      "timeUntil": "tomorrow"
+    },
+    {
+      "id": "upcoming-4",
+      "title": "All Hands Meeting",
+      "startTime": "2024-01-10T09:00:00",
+      "type": "all-hands",
+      "participants": 45,
+      "isToday": false,
+      "timeUntil": "in 2 days"
+    },
+    {
+      "id": "upcoming-5",
+      "title": "Technical Architecture Review", 
+      "startTime": "2024-01-10T15:00:00",
+      "type": "technical",
+      "participants": 5,
+      "isToday": false,
+      "timeUntil": "in 2 days"
+    },
+    {
+      "id": "upcoming-6",
+      "title": "Client Check-in Call",
+      "startTime": "2024-01-11T11:00:00", 
+      "type": "client",
+      "participants": 3,
+      "isToday": false,
+      "timeUntil": "in 3 days"
+    }
+  ],
+  "todaySchedule": [
+    {
+      "time": "09:00",
+      "title": "Morning Planning",
+      "type": "personal",
+      "duration": 30
+    },
+    {
+      "time": "10:00",
+      "title": "Focus Time - Development",
+      "type": "focus",
+      "duration": 120
+    },
+    {
+      "time": "14:00",
+      "title": "Team Sync",
+      "type": "meeting",
+      "duration": 60
+    },
+    {
+      "time": "16:00",
+      "title": "Code Review",
+      "type": "collaboration",
+      "duration": 90
+    }
+  ],
+  "timeSlots": [
+    "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+    "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+    "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30"
+  ],
+  "preferences": {
+    "workingHours": {
+      "start": "09:00",
+      "end": "17:00"
+    },
+    "timeZone": "America/New_York",
+    "defaultMeetingDuration": 60,
+    "bufferTime": 15,
+    "weekStartsOn": "monday"
+  }
+}

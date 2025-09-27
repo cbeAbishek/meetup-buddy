@@ -1,0 +1,649 @@
+{
+  "users": [
+    {
+      "id": "user1",
+      "name": "Alice Chen",
+      "email": "alice.chen@company.com",
+      "avatar": "AC",
+      "role": "Product Manager",
+      "department": "Product",
+      "status": "online",
+      "timezone": "America/New_York",
+      "lastActive": "2025-09-27T15:30:00Z"
+    },
+    {
+      "id": "user2", 
+      "name": "Bob Smith",
+      "email": "bob.smith@company.com",
+      "avatar": "BS",
+      "role": "Software Engineer",
+      "department": "Engineering",
+      "status": "online",
+      "timezone": "America/Los_Angeles",
+      "lastActive": "2025-09-27T14:20:00Z"
+    },
+    {
+      "id": "user3",
+      "name": "Carol Jones",
+      "email": "carol.jones@company.com", 
+      "avatar": "CJ",
+      "role": "UX Designer",
+      "department": "Design",
+      "status": "away",
+      "timezone": "Europe/London",
+      "lastActive": "2025-09-27T13:45:00Z"
+    },
+    {
+      "id": "user4",
+      "name": "David Lee",
+      "email": "david.lee@company.com",
+      "avatar": "DL", 
+      "role": "Data Analyst",
+      "department": "Analytics",
+      "status": "online",
+      "timezone": "Asia/Singapore",
+      "lastActive": "2025-09-27T16:00:00Z"
+    },
+    {
+      "id": "user5",
+      "name": "Emily Wong",
+      "email": "emily.wong@company.com",
+      "avatar": "EW",
+      "role": "Marketing Manager",
+      "department": "Marketing", 
+      "status": "offline",
+      "timezone": "America/New_York",
+      "lastActive": "2025-09-26T18:30:00Z"
+    },
+    {
+      "id": "user6",
+      "name": "Frank Martinez",
+      "email": "frank.martinez@company.com",
+      "avatar": "FM",
+      "role": "Sales Director",
+      "department": "Sales",
+      "status": "online",
+      "timezone": "America/Chicago",
+      "lastActive": "2025-09-27T15:45:00Z"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group1",
+      "name": "Product Team Alpha",
+      "description": "Main product development team focused on core platform features",
+      "type": "team",
+      "privacy": "private",
+      "avatar": "PTA",
+      "color": "#0EA5E9",
+      "memberCount": 8,
+      "createdBy": "user1",
+      "createdAt": "2025-09-01T10:00:00Z",
+      "lastActivity": "2025-09-27T14:30:00Z",
+      "members": [
+        { "userId": "user1", "role": "owner", "joinedAt": "2025-09-01T10:00:00Z" },
+        { "userId": "user2", "role": "admin", "joinedAt": "2025-09-01T10:30:00Z" },
+        { "userId": "user3", "role": "member", "joinedAt": "2025-09-02T09:00:00Z" },
+        { "userId": "user4", "role": "member", "joinedAt": "2025-09-02T14:00:00Z" }
+      ],
+      "channels": [
+        { "id": "ch1", "name": "general", "type": "text", "unreadCount": 3 },
+        { "id": "ch2", "name": "announcements", "type": "text", "unreadCount": 0 },
+        { "id": "ch3", "name": "design-reviews", "type": "text", "unreadCount": 1 }
+      ],
+      "stats": {
+        "totalMessages": 1247,
+        "totalMeetings": 23,
+        "avgMeetingDuration": 45,
+        "activeThisWeek": true
+      }
+    },
+    {
+      "id": "group2", 
+      "name": "Engineering Guild",
+      "description": "Cross-team engineering collaboration and knowledge sharing",
+      "type": "guild",
+      "privacy": "public",
+      "avatar": "EG",
+      "color": "#10B981",
+      "memberCount": 15,
+      "createdBy": "user2",
+      "createdAt": "2025-08-15T14:00:00Z",
+      "lastActivity": "2025-09-27T11:15:00Z",
+      "members": [
+        { "userId": "user2", "role": "owner", "joinedAt": "2025-08-15T14:00:00Z" },
+        { "userId": "user1", "role": "member", "joinedAt": "2025-08-16T09:00:00Z" },
+        { "userId": "user4", "role": "member", "joinedAt": "2025-08-20T10:30:00Z" }
+      ],
+      "channels": [
+        { "id": "ch4", "name": "general", "type": "text", "unreadCount": 5 },
+        { "id": "ch5", "name": "tech-talks", "type": "text", "unreadCount": 2 },
+        { "id": "ch6", "name": "code-reviews", "type": "text", "unreadCount": 0 }
+      ],
+      "stats": {
+        "totalMessages": 892,
+        "totalMeetings": 12,
+        "avgMeetingDuration": 60,
+        "activeThisWeek": true
+      }
+    },
+    {
+      "id": "group3",
+      "name": "Design System Committee", 
+      "description": "Maintaining consistency across product design",
+      "type": "committee",
+      "privacy": "private",
+      "avatar": "DSC",
+      "color": "#8B5CF6",
+      "memberCount": 6,
+      "createdBy": "user3",
+      "createdAt": "2025-07-20T16:00:00Z", 
+      "lastActivity": "2025-09-26T17:00:00Z",
+      "members": [
+        { "userId": "user3", "role": "owner", "joinedAt": "2025-07-20T16:00:00Z" },
+        { "userId": "user1", "role": "admin", "joinedAt": "2025-07-21T09:00:00Z" },
+        { "userId": "user5", "role": "member", "joinedAt": "2025-07-25T11:00:00Z" }
+      ],
+      "channels": [
+        { "id": "ch7", "name": "general", "type": "text", "unreadCount": 1 },
+        { "id": "ch8", "name": "component-library", "type": "text", "unreadCount": 0 }
+      ],
+      "stats": {
+        "totalMessages": 456,
+        "totalMeetings": 8,
+        "avgMeetingDuration": 30,
+        "activeThisWeek": false
+      }
+    }
+  ],
+  "chats": [
+    {
+      "id": "chat1",
+      "type": "direct",
+      "name": "Alice Chen",
+      "participants": ["user1", "currentUser"],
+      "lastMessage": {
+        "id": "msg1",
+        "senderId": "user1",
+        "content": "Hey! Can we review the product roadmap slides before tomorrow's meeting?",
+        "timestamp": "2025-09-27T15:30:00Z",
+        "type": "text"
+      },
+      "unreadCount": 2,
+      "isOnline": true,
+      "avatar": "AC"
+    },
+    {
+      "id": "chat2", 
+      "type": "group",
+      "name": "Sprint Planning",
+      "participants": ["user1", "user2", "user3", "currentUser"],
+      "lastMessage": {
+        "id": "msg2",
+        "senderId": "user2",
+        "content": "I've updated the story estimates in Jira",
+        "timestamp": "2025-09-27T14:45:00Z",
+        "type": "text"
+      },
+      "unreadCount": 0,
+      "avatar": "SP",
+      "color": "#F59E0B"
+    },
+    {
+      "id": "chat3",
+      "type": "direct", 
+      "name": "Bob Smith",
+      "participants": ["user2", "currentUser"],
+      "lastMessage": {
+        "id": "msg3",
+        "senderId": "currentUser",
+        "content": "The API integration looks good. Ready for testing!",
+        "timestamp": "2025-09-27T13:20:00Z",
+        "type": "text"
+      },
+      "unreadCount": 0,
+      "isOnline": true,
+      "avatar": "BS"
+    },
+    {
+      "id": "chat4",
+      "type": "group",
+      "name": "Design Reviews",
+      "participants": ["user1", "user3", "user5", "currentUser"],
+      "lastMessage": {
+        "id": "msg4",
+        "senderId": "user3",
+        "content": "📎 Figma mockups for the new dashboard layout",
+        "timestamp": "2025-09-27T12:15:00Z",
+        "type": "file"
+      },
+      "unreadCount": 1,
+      "avatar": "DR",
+      "color": "#EC4899"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg1",
+      "chatId": "chat1",
+      "senderId": "user1",
+      "senderName": "Alice Chen",
+      "content": "Hey! Can we review the product roadmap slides before tomorrow's meeting?",
+      "timestamp": "2025-09-27T15:30:00Z",
+      "type": "text",
+      "reactions": [],
+      "edited": false
+    },
+    {
+      "id": "msg2",
+      "chatId": "chat1", 
+      "senderId": "currentUser",
+      "senderName": "You",
+      "content": "Sure! I'll send them over in 10 minutes. Do you want to do a quick call to go through them?",
+      "timestamp": "2025-09-27T15:32:00Z",
+      "type": "text",
+      "reactions": [{ "emoji": "👍", "users": ["user1"] }],
+      "edited": false
+    },
+    {
+      "id": "msg3",
+      "chatId": "chat1",
+      "senderId": "user1", 
+      "senderName": "Alice Chen",
+      "content": "Perfect! Let's do a 15-minute call at 4 PM. I'll create a quick meeting invite.",
+      "timestamp": "2025-09-27T15:33:00Z",
+      "type": "text",
+      "reactions": [],
+      "edited": false
+    },
+    {
+      "id": "msg4",
+      "chatId": "chat2",
+      "senderId": "user2",
+      "senderName": "Bob Smith", 
+      "content": "Morning team! Ready for sprint planning?",
+      "timestamp": "2025-09-27T09:00:00Z",
+      "type": "text",
+      "reactions": [{ "emoji": "🚀", "users": ["user1", "user3"] }],
+      "edited": false
+    },
+    {
+      "id": "msg5",
+      "chatId": "chat2",
+      "senderId": "user3",
+      "senderName": "Carol Jones",
+      "content": "Yes! I have the user stories prioritized. Sharing the updated backlog now.",
+      "timestamp": "2025-09-27T09:05:00Z", 
+      "type": "text",
+      "reactions": [],
+      "edited": false
+    },
+    {
+      "id": "msg6",
+      "chatId": "chat4",
+      "senderId": "user3",
+      "senderName": "Carol Jones",
+      "content": "I've uploaded the new dashboard mockups. Please review and leave your feedback!",
+      "timestamp": "2025-09-27T12:15:00Z",
+      "type": "text",
+      "attachments": [
+        {
+          "id": "att1",
+          "name": "dashboard-mockups-v2.fig",
+          "type": "figma",
+          "size": "2.4 MB",
+          "url": "#"
+        }
+      ],
+      "reactions": [{ "emoji": "🎨", "users": ["user1", "user5"] }],
+      "edited": false
+    }
+  ],
+  "meetings": [
+    {
+      "id": "meeting1",
+      "title": "Product Roadmap Q4 Planning",
+      "description": "Quarterly planning session to define product priorities and resource allocation for Q4",
+      "startTime": "2025-09-28T14:00:00Z",
+      "endTime": "2025-09-28T15:30:00Z",
+      "status": "scheduled",
+      "type": "planning",
+      "location": "Conference Room A / Zoom",
+      "meetingUrl": "https://zoom.us/j/123456789",
+      "organizer": "user1",
+      "participants": [
+        { "userId": "user1", "status": "accepted", "role": "organizer" },
+        { "userId": "user2", "status": "accepted", "role": "participant" },
+        { "userId": "user3", "status": "pending", "role": "participant" },
+        { "userId": "user4", "status": "accepted", "role": "participant" },
+        { "userId": "user5", "status": "tentative", "role": "participant" }
+      ],
+      "agenda": [
+        {
+          "id": "agenda1", 
+          "title": "Q3 Review & Key Metrics",
+          "duration": 15,
+          "presenter": "user1",
+          "notes": "Review Q3 OKRs, user growth, and feature adoption rates"
+        },
+        {
+          "id": "agenda2",
+          "title": "Q4 Feature Prioritization",
+          "duration": 30,
+          "presenter": "user1",
+          "notes": "Discuss and prioritize top 5 features for Q4 based on user research"
+        },
+        {
+          "id": "agenda3",
+          "title": "Resource Planning",
+          "duration": 30,
+          "presenter": "user2",
+          "notes": "Engineering capacity planning and hiring roadmap"
+        },
+        {
+          "id": "agenda4",
+          "title": "Risk Assessment",
+          "duration": 15,
+          "presenter": "user4",
+          "notes": "Identify potential risks and mitigation strategies"
+        }
+      ],
+      "attachments": [
+        {
+          "id": "att1",
+          "name": "Q3-metrics-report.pdf",
+          "type": "pdf",
+          "size": "1.2 MB"
+        }
+      ],
+      "recurring": false,
+      "tags": ["planning", "quarterly", "roadmap"]
+    },
+    {
+      "id": "meeting2",
+      "title": "Daily Standup - Team Alpha",
+      "description": "Daily sync to discuss progress, blockers, and priorities",
+      "startTime": "2025-09-28T09:00:00Z", 
+      "endTime": "2025-09-28T09:30:00Z",
+      "status": "scheduled",
+      "type": "standup",
+      "location": "Virtual Meeting",
+      "meetingUrl": "https://meet.google.com/abc-defg-hij",
+      "organizer": "user2",
+      "participants": [
+        { "userId": "user1", "status": "accepted", "role": "participant" },
+        { "userId": "user2", "status": "accepted", "role": "organizer" },
+        { "userId": "user3", "status": "accepted", "role": "participant" },
+        { "userId": "user4", "status": "accepted", "role": "participant" }
+      ],
+      "agenda": [
+        {
+          "id": "agenda5",
+          "title": "Yesterday's Accomplishments", 
+          "duration": 10,
+          "presenter": "team",
+          "notes": "What did everyone complete yesterday?"
+        },
+        {
+          "id": "agenda6",
+          "title": "Today's Goals",
+          "duration": 10, 
+          "presenter": "team",
+          "notes": "What is everyone working on today?"
+        },
+        {
+          "id": "agenda7",
+          "title": "Blockers & Dependencies",
+          "duration": 10,
+          "presenter": "team", 
+          "notes": "Any blockers or help needed?"
+        }
+      ],
+      "recurring": {
+        "frequency": "daily",
+        "daysOfWeek": ["monday", "tuesday", "wednesday", "thursday", "friday"]
+      },
+      "tags": ["standup", "daily", "team-alpha"]
+    },
+    {
+      "id": "meeting3",
+      "title": "Client Onboarding: TechCorp Inc",
+      "description": "Onboarding session for our new enterprise client",
+      "startTime": "2025-09-28T16:00:00Z",
+      "endTime": "2025-09-28T17:00:00Z",
+      "status": "scheduled",
+      "type": "client",
+      "location": "Virtual Meeting",
+      "meetingUrl": "https://teams.microsoft.com/l/meetup-join/xyz",
+      "organizer": "user6",
+      "participants": [
+        { "userId": "user6", "status": "accepted", "role": "organizer" },
+        { "userId": "user1", "status": "accepted", "role": "participant" },
+        { "userId": "user5", "status": "accepted", "role": "participant" }
+      ],
+      "agenda": [
+        {
+          "id": "agenda8",
+          "title": "Welcome & Introductions",
+          "duration": 10,
+          "presenter": "user6",
+          "notes": "Team introductions and client background"
+        },
+        {
+          "id": "agenda9", 
+          "title": "Platform Demo",
+          "duration": 30,
+          "presenter": "user1",
+          "notes": "Comprehensive walkthrough of key features"
+        },
+        {
+          "id": "agenda10",
+          "title": "Implementation Timeline",
+          "duration": 15,
+          "presenter": "user6",
+          "notes": "Discuss rollout phases and milestones"
+        },
+        {
+          "id": "agenda11",
+          "title": "Q&A Session",
+          "duration": 5,
+          "presenter": "team",
+          "notes": "Address client questions and concerns"
+        }
+      ],
+      "recurring": false,
+      "tags": ["client", "onboarding", "demo"]
+    },
+    {
+      "id": "meeting4",
+      "title": "Design System Review",
+      "description": "Monthly review of design system updates and component library changes",
+      "startTime": "2025-09-29T15:00:00Z",
+      "endTime": "2025-09-29T16:00:00Z",
+      "status": "scheduled",
+      "type": "review",
+      "location": "Design Studio",
+      "organizer": "user3",
+      "participants": [
+        { "userId": "user3", "status": "accepted", "role": "organizer" },
+        { "userId": "user1", "status": "accepted", "role": "participant" },
+        { "userId": "user5", "status": "pending", "role": "participant" }
+      ],
+      "agenda": [
+        {
+          "id": "agenda12",
+          "title": "Component Updates",
+          "duration": 20,
+          "presenter": "user3",
+          "notes": "New components added this month and breaking changes"
+        },
+        {
+          "id": "agenda13",
+          "title": "Usage Analytics",
+          "duration": 15,
+          "presenter": "user3",
+          "notes": "Most/least used components and adoption rates"
+        },
+        {
+          "id": "agenda14",
+          "title": "Upcoming Changes",
+          "duration": 20,
+          "presenter": "user3",
+          "notes": "Planned updates for next month"
+        },
+        {
+          "id": "agenda15",
+          "title": "Feedback & Requests",
+          "duration": 5,
+          "presenter": "team", 
+          "notes": "Team feedback and component requests"
+        }
+      ],
+      "recurring": {
+        "frequency": "monthly",
+        "dayOfMonth": 29
+      },
+      "tags": ["design", "review", "monthly"]
+    }
+  ],
+  "calendar": [
+    {
+      "date": "2025-09-27",
+      "meetings": ["meeting1", "meeting2"],
+      "events": [
+        {
+          "id": "event1",
+          "title": "Team Lunch",
+          "startTime": "12:00",
+          "endTime": "13:00",
+          "type": "social"
+        }
+      ]
+    },
+    {
+      "date": "2025-09-28", 
+      "meetings": ["meeting2", "meeting3"],
+      "events": []
+    },
+    {
+      "date": "2025-09-29",
+      "meetings": ["meeting2", "meeting4"],
+      "events": [
+        {
+          "id": "event2",
+          "title": "All Hands Meeting",
+          "startTime": "10:00",
+          "endTime": "11:00", 
+          "type": "company"
+        }
+      ]
+    }
+  ],
+  "followUps": [
+    {
+      "id": "followup1",
+      "meetingId": "meeting1",
+      "title": "Finalize Q4 budget allocation",
+      "description": "Work with finance team to finalize budget for Q4 initiatives",
+      "assignee": "user1",
+      "dueDate": "2025-09-30T23:59:59Z",
+      "status": "pending",
+      "priority": "high",
+      "tags": ["budget", "planning"]
+    },
+    {
+      "id": "followup2",
+      "meetingId": "meeting1", 
+      "title": "Update engineering hiring plan",
+      "description": "Revise hiring plan based on Q4 resource requirements",
+      "assignee": "user2",
+      "dueDate": "2025-10-01T23:59:59Z",
+      "status": "in-progress",
+      "priority": "high",
+      "tags": ["hiring", "engineering"]
+    },
+    {
+      "id": "followup3",
+      "meetingId": "meeting3",
+      "title": "Send welcome package to TechCorp",
+      "description": "Prepare and send onboarding materials and credentials",
+      "assignee": "user5", 
+      "dueDate": "2025-09-29T12:00:00Z",
+      "status": "completed",
+      "priority": "medium",
+      "completedAt": "2025-09-28T10:30:00Z",
+      "tags": ["onboarding", "client"]
+    },
+    {
+      "id": "followup4",
+      "meetingId": "meeting4",
+      "title": "Update component documentation",
+      "description": "Update Storybook documentation for new components",
+      "assignee": "user3",
+      "dueDate": "2025-10-05T23:59:59Z",
+      "status": "pending", 
+      "priority": "medium",
+      "tags": ["documentation", "design-system"]
+    }
+  ],
+  "notes": [
+    {
+      "id": "note1",
+      "meetingId": "meeting1",
+      "title": "Q4 Roadmap Planning Notes",
+      "content": "## Key Decisions\n\n- Prioritize mobile app improvements\n- Delay advanced analytics features to Q1\n- Increase focus on performance optimization\n\n## Action Items\n\n- [ ] Research mobile usage patterns (Alice)\n- [x] Benchmark competitor features (Bob)\n- [ ] Estimate effort for performance improvements (Team)\n\n## Risks\n\n- Resource constraints may impact timeline\n- Dependencies on external API changes",
+      "createdBy": "user1",
+      "createdAt": "2025-09-27T16:00:00Z",
+      "updatedAt": "2025-09-27T16:30:00Z",
+      "tags": ["roadmap", "planning", "q4"]
+    },
+    {
+      "id": "note2",
+      "meetingId": "meeting3",
+      "title": "TechCorp Onboarding Session",
+      "content": "## Client Background\n\n- 500+ employees\n- Currently using legacy system\n- Migration planned over 3 months\n\n## Key Requirements\n\n- SSO integration with Azure AD\n- Custom branding\n- Advanced reporting features\n- 24/7 support during migration\n\n## Next Steps\n\n1. Technical requirements gathering call\n2. SSO configuration\n3. Pilot group setup (25 users)\n4. Training session scheduling",
+      "createdBy": "user6",
+      "createdAt": "2025-09-28T16:30:00Z",
+      "updatedAt": "2025-09-28T16:30:00Z",
+      "tags": ["client", "onboarding", "enterprise"]
+    }
+  ],
+  "analytics": {
+    "dashboard": {
+      "totalMeetings": 42,
+      "totalMeetingHours": 67.5,
+      "averageMeetingDuration": 48,
+      "meetingsThisWeek": 8,
+      "meetingHoursThisWeek": 12.5,
+      "participantEngagement": 87,
+      "onTimeRate": 92
+    },
+    "groups": {
+      "totalGroups": 3,
+      "activeGroups": 2,
+      "totalMembers": 29,
+      "averageGroupSize": 9.7,
+      "messagesSent": 2595,
+      "messagesThisWeek": 127
+    },
+    "chats": {
+      "activeChats": 4,
+      "totalMessages": 156,
+      "messagesThisWeek": 28,
+      "averageResponseTime": "12m",
+      "unreadMessages": 6
+    },
+    "calendar": {
+      "busyHoursPerWeek": 18.5,
+      "meetingFrequency": 2.3,
+      "peakMeetingHours": ["10:00-11:00", "14:00-15:00", "16:00-17:00"],
+      "meetingTypes": {
+        "standup": 35,
+        "planning": 20,
+        "review": 15,
+        "client": 12,
+        "social": 18
+      }
+    }
+  }
+}

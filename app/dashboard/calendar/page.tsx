@@ -24,6 +24,7 @@ import {
   X
 } from 'lucide-react'
 import { useProfiles, type Profile } from '@/hooks/use-profiles'
+import calendarData from '@/lib/mock-data/calendar-data.json'
 
 export default function CalendarPage() {
   // Authentication
@@ -31,6 +32,7 @@ export default function CalendarPage() {
   
   const [currentDate, setCurrentDate] = useState(new Date())
   const [view, setView] = useState<'week' | 'month'>('week')
+  const [mockData] = useState(calendarData)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>([])
   const [isCreatingMeeting, setIsCreatingMeeting] = useState(false)
@@ -618,7 +620,7 @@ export default function CalendarPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">This Week</p>
-                <p className="text-2xl font-bold">0</p>
+                <p className="text-2xl font-bold">{mockData.analytics.thisWeek.totalMeetings}</p>
                 <p className="text-xs text-muted-foreground">meetings</p>
               </div>
               <CalendarIcon className="h-8 w-8 text-blue-500" />
@@ -631,7 +633,7 @@ export default function CalendarPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Hours</p>
-                <p className="text-2xl font-bold">0h</p>
+                <p className="text-2xl font-bold">{mockData.analytics.thisWeek.totalHours}h</p>
                 <p className="text-xs text-muted-foreground">this week</p>
               </div>
               <Clock className="h-8 w-8 text-green-500" />
@@ -644,7 +646,7 @@ export default function CalendarPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Participants</p>
-                <p className="text-2xl font-bold">0</p>
+                <p className="text-2xl font-bold">{mockData.analytics.thisWeek.participants}</p>
                 <p className="text-xs text-muted-foreground">total invitees</p>
               </div>
               <Users className="h-8 w-8 text-purple-500" />
@@ -657,8 +659,8 @@ export default function CalendarPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Virtual</p>
-                <p className="text-2xl font-bold">0</p>
-                <p className="text-xs text-muted-foreground">of 0 meetings</p>
+                <p className="text-2xl font-bold">{mockData.analytics.thisWeek.virtualMeetings}</p>
+                <p className="text-xs text-muted-foreground">of {mockData.analytics.thisWeek.totalMeetings} meetings</p>
               </div>
               <Video className="h-8 w-8 text-orange-500" />
             </div>
@@ -683,12 +685,18 @@ export default function CalendarPage() {
           <div className="grid grid-cols-1 md:grid-cols-7 gap-1 md:gap-2">
             {weekDates.map((date, index) => {
               const isToday = date.toDateString() === new Date().toDateString()
+              const dateString = date.toISOString().split('T')[0]
+              const dayData = mockData.calendar.find(d => d.date === dateString)
+              const dayMeetings = dayData?.meetings?.map(id => mockData.meetings.find(m => m.id === id)).filter(Boolean) || []
+              const dayEvents = dayData?.events?.map(id => mockData.events.find(e => e.id === id)).filter(Boolean) || []
               
               return (
                 <div
                   key={index}
                   className={`min-h-[200px] p-3 border rounded-lg ${
-                    isToday ? 'bg-blue-50 border-blue-200 dark:bg-blue-950/20' : 'bg-card'
+                    isToday ? 'bg-blue-50 border-blue-200 dark:bg-blue-950/20' : 
+                    dayData?.dayType === 'holiday' ? 'bg-red-50 border-red-200 dark:bg-red-950/20' :
+                    dayData?.dayType === 'weekend' ? 'bg-gray-50 border-gray-200 dark:bg-gray-950/20' : 'bg-card'
                   }`}
                 >
                   <div className="text-center mb-3">
@@ -696,17 +704,57 @@ export default function CalendarPage() {
                       {date.toLocaleDateString('en-US', { weekday: 'short' })}
                     </p>
                     <p className={`text-lg font-semibold ${
-                      isToday ? 'text-blue-600' : ''
+                      isToday ? 'text-blue-600' : 
+                      dayData?.dayType === 'holiday' ? 'text-red-600' : ''
                     }`}>
                       {date.getDate()}
                     </p>
+                    {dayData?.dayType === 'holiday' && (
+                      <p className="text-xs text-red-500">Holiday</p>
+                    )}
                   </div>
                   
-                  <div className="space-y-2">
-                    {/* Empty state - no meetings for this date */}
-                    <div className="text-center py-4 text-xs text-muted-foreground">
-                      No meetings
-                    </div>
+                  <div className="space-y-1">
+                    {/* Events */}
+                    {dayEvents.map((event: any) => (
+                      <div key={event.id} className="p-1 rounded text-xs border-l-2" style={{ borderLeftColor: event.color, backgroundColor: event.color + '20' }}>
+                        <div className="font-medium truncate">{event.title}</div>
+                        {!event.allDay && (
+                          <div className="text-muted-foreground">
+                            {new Date(event.startTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    
+                    {/* Meetings */}
+                    {dayMeetings.map((meeting: any) => (
+                      <div key={meeting.id} className="p-1 rounded text-xs border-l-2" style={{ borderLeftColor: meeting.color, backgroundColor: meeting.color + '20' }}>
+                        <div className="font-medium truncate">{meeting.title}</div>
+                        <div className="text-muted-foreground">
+                          {new Date(meeting.startTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                        <div className="flex -space-x-1 mt-1">
+                          {meeting.participants.slice(0, 3).map((p: any, idx: number) => (
+                            <div key={idx} className="w-4 h-4 rounded-full bg-gray-300 border border-white text-[8px] flex items-center justify-center">
+                              {p.avatar}
+                            </div>
+                          ))}
+                          {meeting.participants.length > 3 && (
+                            <div className="w-4 h-4 rounded-full bg-gray-400 border border-white text-[8px] flex items-center justify-center text-white">
+                              +{meeting.participants.length - 3}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* Empty state */}
+                    {dayMeetings.length === 0 && dayEvents.length === 0 && (
+                      <div className="text-center py-4 text-xs text-muted-foreground">
+                        No meetings
+                      </div>
+                    )}
                   </div>
                 </div>
               )
@@ -715,20 +763,38 @@ export default function CalendarPage() {
         </CardContent>
       </Card>
 
-      {/* Empty States */}
+      {/* Today's Schedule and Statistics */}
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Today's Schedule</CardTitle>
-            <CardDescription>Your meetings for today</CardDescription>
+            <CardDescription>Your schedule for today</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-12">
-              <div className="text-muted-foreground">
-                <CalendarIcon className="h-8 w-8 mx-auto mb-3" />
-                <p className="text-sm">No meetings today</p>
-                <p className="text-xs">Your meetings for today will appear here</p>
-              </div>
+            <div className="space-y-3">
+              {mockData.todaySchedule.map((item, index) => {
+                const typeColors = {
+                  personal: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                  focus: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                  meeting: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+                  collaboration: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300'
+                }
+                
+                return (
+                  <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors">
+                    <div className="text-sm font-medium text-muted-foreground w-16">
+                      {item.time}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{item.title}</p>
+                      <p className="text-xs text-muted-foreground">{item.duration} minutes</p>
+                    </div>
+                    <Badge className={`text-xs ${(typeColors as any)[item.type]}`} variant="secondary">
+                      {item.type}
+                    </Badge>
+                  </div>
+                )
+              })}
             </div>
           </CardContent>
         </Card>
@@ -739,16 +805,99 @@ export default function CalendarPage() {
             <CardDescription>Overview of your meeting patterns</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-12">
-              <div className="text-muted-foreground">
-                <Users className="h-8 w-8 mx-auto mb-3" />
-                <p className="text-sm">No meeting data</p>
-                <p className="text-xs">Start scheduling meetings to see statistics</p>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-3 bg-muted/50 rounded-lg">
+                  <div className="text-lg font-bold">{mockData.analytics.thisMonth.totalMeetings}</div>
+                  <div className="text-xs text-muted-foreground">This Month</div>
+                </div>
+                <div className="text-center p-3 bg-muted/50 rounded-lg">
+                  <div className="text-lg font-bold">{mockData.analytics.thisMonth.averageDuration}m</div>
+                  <div className="text-xs text-muted-foreground">Avg Duration</div>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Meeting Types</h4>
+                {Object.entries(mockData.analytics.meetingTypes).map(([type, percentage]) => (
+                  <div key={type} className="flex items-center justify-between">
+                    <span className="text-sm capitalize">{type}</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-16 bg-muted rounded-full h-2">
+                        <div 
+                          className="bg-primary h-2 rounded-full" 
+                          style={{ width: `${percentage}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs text-muted-foreground">{percentage}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="pt-2 border-t">
+                <h4 className="text-sm font-medium mb-2">Peak Meeting Days</h4>
+                <div className="flex flex-wrap gap-1">
+                  {mockData.analytics.peakDays.map((day) => (
+                    <Badge key={day} variant="outline" className="text-xs">
+                      {day}
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Upcoming Meetings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Upcoming Meetings</CardTitle>
+          <CardDescription>Next meetings on your schedule</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {mockData.upcomingMeetings.map((meeting) => {
+              const startTime = new Date(meeting.startTime)
+              const typeColors = {
+                planning: 'bg-blue-500',
+                standup: 'bg-green-500', 
+                client: 'bg-purple-500',
+                review: 'bg-orange-500',
+                'one-on-one': 'bg-indigo-500',
+                'all-hands': 'bg-red-500',
+                technical: 'bg-teal-500'
+              }
+              
+              return (
+                <div key={meeting.id} className="flex items-center space-x-4 p-4 rounded-lg border hover:bg-muted/50 transition-colors">
+                  <div className={`w-3 h-3 rounded-full ${(typeColors as any)[meeting.type] || 'bg-gray-500'}`} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{meeting.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {meeting.isToday ? 'Today' : startTime.toLocaleDateString()} at {startTime.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-1">
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">{meeting.participants}</span>
+                    </div>
+                    <Badge variant="outline" className="text-xs capitalize">
+                      {meeting.type}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">{meeting.timeUntil}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
