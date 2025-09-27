@@ -1,17 +1,16 @@
-'use client'
+"use client"
 
 import React, { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+// Card components not used in this page; removed to avoid unused import errors
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { 
-  Send, 
-  Search, 
+import {
+  Send,
+  Search,
   MoreVertical,
   Phone,
   Video,
@@ -19,21 +18,17 @@ import {
   Smile,
   Mic,
   Check,
-  CheckCheck,
   Clock,
   Users,
   Crown,
   Settings,
-  Archive,
   Pin,
-  Trash2,
   Reply,
   Forward
 } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 import { cn } from '@/lib/utils'
 import { ProtectedRoute } from '@/components/protected-route'
-import CreateGroupModal from '@/components/create-group-modal'
 
 // Mock data types
 interface User {
@@ -208,9 +203,8 @@ function ChatsContent() {
   const [messages, setMessages] = useState<Message[]>(mockMessages)
   const [newMessage, setNewMessage] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
-  const [showCreateGroup, setShowCreateGroup] = useState(false)
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>(mockChatRooms)
+  const [isTyping] = useState(false)
+  const [chatRooms] = useState<ChatRoom[]>(mockChatRooms)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -264,9 +258,11 @@ function ChatsContent() {
       case 'sent':
         return <Check className="h-3 w-3 text-gray-400" />
       case 'delivered':
-        return <CheckCheck className="h-3 w-3 text-gray-400" />
+        return <Check className="h-3 w-3 text-gray-400" />
       case 'read':
-        return <CheckCheck className="h-3 w-3 text-teal-500" />
+        return <Check className="h-3 w-3 text-teal-500" />
+      default:
+        return null
     }
   }
 
@@ -292,22 +288,7 @@ function ChatsContent() {
     }
   }
 
-  const handleCreateGroup = (data: any) => {
-    const newGroup: ChatRoom = {
-      id: Date.now().toString(),
-      name: data.name,
-      type: 'group',
-      participants: mockUsers.filter(u => data.participants.includes(u.id)),
-      unreadCount: 0,
-      isPinned: false,
-      isArchived: false,
-      groupLeader: user?.id,
-      description: data.description
-    }
-    
-    setChatRooms(prev => [newGroup, ...prev])
-    setSelectedChat(newGroup)
-  }
+  // Group creation UI was removed from this page for now; keep chat room state minimal.
 
   const filteredChats = chatRooms.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())

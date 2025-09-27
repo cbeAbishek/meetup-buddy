@@ -5,8 +5,8 @@ import {
   IconFolder,
   IconShare3,
   IconTrash,
-  type Icon,
 } from "@tabler/icons-react"
+import type { ComponentType, SVGProps } from "react"
 
 import {
   DropdownMenu,
@@ -31,7 +31,8 @@ export function NavDocuments({
   items: {
     name: string
     url: string
-    icon: Icon
+    // SVG icon component from tabler-icons-react or any SVG component
+    icon: ComponentType<SVGProps<SVGSVGElement>>
   }[]
 }) {
   const { isMobile } = useSidebar()
