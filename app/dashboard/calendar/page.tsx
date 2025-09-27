@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useAuth } from "@/lib/auth-context"
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -25,6 +26,9 @@ import {
 import { useProfiles, type Profile } from '@/hooks/use-profiles'
 
 export default function CalendarPage() {
+  // Authentication
+  const { user, session, loading: authLoading } = useAuth()
+  
   const [currentDate, setCurrentDate] = useState(new Date())
   const [view, setView] = useState<'week' | 'month'>('week')
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -46,6 +50,41 @@ export default function CalendarPage() {
 
   // Fetch all profiles for participant selection
   const { profiles, loading: profilesLoading } = useProfiles()
+
+  // Authentication check
+  useEffect(() => {
+    if (!authLoading && !user) {
+      // Redirect to auth page if not authenticated
+      window.location.href = '/auth?redirectTo=/dashboard/calendar'
+    }
+  }, [user, authLoading])
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show auth required if no user
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center space-y-4">
+          <h2 className="text-2xl font-bold">Authentication Required</h2>
+          <p className="text-muted-foreground">Please sign in to access the calendar</p>
+          <Button onClick={() => window.location.href = '/auth'}>
+            Sign In
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   // Get the current week dates
   const getWeekDates = () => {
@@ -76,6 +115,13 @@ export default function CalendarPage() {
     try {
       setIsCreatingMeeting(true)
       
+      // Check authentication before proceeding
+      if (!user || !session) {
+        throw new Error('You must be signed in to create meetings. Please sign in and try again.')
+      }
+      
+      console.log('🚀 Creating meeting for user:', user.email)
+      
       // Prepare meeting data
       const meetingData = {
         title: meetingForm.title,
@@ -92,6 +138,8 @@ export default function CalendarPage() {
         }))
       }
 
+      console.log('📤 Sending meeting data:', meetingData)
+
       // Call API to create meeting
       const response = await fetch('/api/meetings', {
         method: 'POST',
@@ -101,15 +149,27 @@ export default function CalendarPage() {
         body: JSON.stringify(meetingData)
       })
 
+      console.log('📥 API Response status:', response.status)
+      
       const result = await response.json()
+      console.log('📥 API Response data:', result)
 
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Authentication failed. Please sign out and sign back in.')
+        }
         if (response.status === 409 && result.conflicts) {
           // Handle scheduling conflicts
           const conflictNames = result.conflicts.map((c: any) => c.full_name || c.email).join(', ')
           throw new Error(`Scheduling conflict detected with: ${conflictNames}`)
         }
-        throw new Error(result.error || 'Failed to create meeting')
+        
+        // Enhanced error message with debugging info
+        const errorMsg = result.error || 'Failed to create meeting'
+        const debugInfo = result.debug ? `\n\nDebug info: ${JSON.stringify(result.debug)}` : ''
+        const suggestion = result.suggestion ? `\n\nSuggestion: ${result.suggestion}` : ''
+        
+        throw new Error(errorMsg + debugInfo + suggestion)
       }
 
       // Success - reset form and close dialog
@@ -136,11 +196,14 @@ export default function CalendarPage() {
       
       alert(`✅ Meeting "${meetingForm.title}" created successfully${participantText}${behalfText}!\n\n${result.message || ''}\n\nDate: ${meetingForm.date}\nTime: ${meetingForm.startTime} - ${meetingForm.endTime}\nType: ${meetingForm.type}`)
       
-      console.log('Meeting created:', result.meeting)
+      console.log('✅ Meeting created successfully:', result.meeting)
       
     } catch (error: any) {
-      console.error('Error creating meeting:', error)
-      alert(`❌ Failed to create meeting: ${error.message}`)
+      console.error('💥 Error creating meeting:', error)
+      
+      // Show detailed error message
+      const errorMessage = error.message || 'Unknown error occurred'
+      alert(`❌ Failed to create meeting:\n\n${errorMessage}\n\n🔍 Check the browser console for more details.`)
     } finally {
       setIsCreatingMeeting(false)
     }
