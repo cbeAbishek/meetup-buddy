@@ -157,13 +157,7 @@ function NavUser() {
             <DropdownMenuItem asChild>
               <Link href="/dashboard/settings">
                 <User className="mr-2 h-4 w-4" />
-                Profile
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/settings">
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
+                Profile & Settings
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -195,7 +189,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       >
         <SidebarHeader className="p-2">
           <div className="flex items-center justify-end">
-            <SidebarTrigger className="hover:bg-teal-100 hover:text-white dark:hover:bg-teal-900/60 dark:hover:text-white text-white" />
+            <SidebarTrigger className="hover:bg-teal-100 hover:teal-800/50 dark:hover:bg-teal-900/60 dark:hover:teal-800/50" />
           </div>
         </SidebarHeader>
         
@@ -203,6 +197,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           <SidebarMenu className="space-y-1">
             {navigationItems.map((item) => {
               const isActive = pathname === item.url
+              const Icon = item.icon
               return (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
@@ -221,7 +216,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                     )}
                   >
                     <Link href={item.url} className="flex w-full items-center gap-2">
-                      <item.icon
+                      <Icon
                         className={cn(
                           "h-4 w-4 transition-colors",
                           isActive ? "text-white" : "text-teal-600 dark:text-teal-300"
