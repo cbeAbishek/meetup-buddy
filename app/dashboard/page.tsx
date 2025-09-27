@@ -1,389 +1,248 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
-import { MeetingDashboardCards } from "@/components/meeting-dashboard-cards"
-import { SiteHeader } from "@/components/site-header"
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar"
-import { Navbar } from "@/components/navbar"
-import { Breadcrumb } from "@/components/breadcrumb"
-import { Accordion } from "@/components/ui/accordion"
-import { DatePicker } from "@/components/ui/date-picker"
-import { SchedulingTable } from "@/components/ui/scheduling-table"
-import { TasksTable } from "@/components/ui/tasks-table"
-import { RightPanel } from "@/components/ui/right-panel"
-import { MeetingSummary } from "@/components/ui/meeting-summary"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+'use client'
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ProtectedRoute } from "@/components/protected-route"
-import MeetupBuddyChatbot from "@/components/meetup-buddy-chatbot"
+import { ArrowUpRight, Users, Calendar, MessageSquare, Clock, TrendingUp, Video, CheckCircle, Plus } from 'lucide-react'
 
-import data from "./data.json"
-
-export default function Page() {
-  return <DashboardContent />
-}
-
-function DashboardContent() {
+export default function DashboardPage() {
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "16rem",
-          "--sidebar-width-icon": "3rem",
-          "--sidebar-primary": "#0d9488", // tailwind teal-600
-          "--sidebar-primary-foreground": "#ffffff",
-          // For the dashboard we want hover/option accents to use teal-700
-          "--sidebar-accent": "#0f766e", // tailwind teal-700
-          "--sidebar-accent-foreground": "#ffffff",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar />
-      <SidebarInset className="flex flex-col bg-slate-50 dark:bg-slate-950">
-        <Navbar />
-        <div className="flex-1 overflow-auto">
-          <div className="flex">
-            <main className="flex-1 p-6">
-            <div className="flex items-center justify-between">
-              <Breadcrumb items={["Dashboard", "Meeting Overview"]} />
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="bg-teal-50 text-teal-600 border-teal-200 dark:bg-teal-950/50 dark:text-teal-600 dark:border-teal-800">
-                  <div className="flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-600 animate-pulse"></span>
-                    <span>AI Assistant Active</span>
+    <div className="flex-1 space-y-6 p-4 md:p-6 lg:p-8">
+      <div className="flex flex-col space-y-2 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">Welcome back! Here's what's happening with your meetings.</p>
+        </div>
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          Schedule Meeting
+        </Button>
+      </div>
+      
+      {/* Stats Overview */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Meetings</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-muted-foreground">
+              <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />
+              +20.1% from last month
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Groups</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">8</div>
+            <p className="text-xs text-muted-foreground">
+              <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />
+              +2 new groups
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Messages</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">156</div>
+            <p className="text-xs text-muted-foreground">
+              <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />
+              +12% this week
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Meeting Hours</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">24h</div>
+            <p className="text-xs text-muted-foreground">
+              <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />
+              +15min avg duration
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid gap-4 lg:grid-cols-7">
+        {/* Recent Activity */}
+        <Card className="lg:col-span-4">
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+            <CardDescription>Your latest meetings and interactions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-4 p-3 rounded-lg bg-muted/50">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500">
+                  <Video className="h-5 w-5 text-white" />
+                </div>
+                <div className="space-y-1 flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-none truncate">Weekly Team Sync</p>
+                  <p className="text-xs text-muted-foreground">Completed 2 hours ago • 45 min duration</p>
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="secondary" className="text-xs">Engineering</Badge>
+                    <span className="text-xs text-muted-foreground">8 participants</span>
                   </div>
-                </Badge>
-                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800">Today, May 15</Badge>
+                </div>
+                <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+              </div>
+              
+              <div className="flex items-center space-x-4 p-3 rounded-lg bg-muted/50">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-500">
+                  <Users className="h-5 w-5 text-white" />
+                </div>
+                <div className="space-y-1 flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-none truncate">New member joined Design Team</p>
+                  <p className="text-xs text-muted-foreground">4 hours ago</p>
+                  <Badge variant="outline" className="text-xs">Team Update</Badge>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4 p-3 rounded-lg bg-muted/50">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500">
+                  <MessageSquare className="h-5 w-5 text-white" />
+                </div>
+                <div className="space-y-1 flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-none truncate">15 new messages in Marketing Group</p>
+                  <p className="text-xs text-muted-foreground">6 hours ago</p>
+                  <Badge variant="secondary" className="text-xs">Marketing</Badge>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4 p-3 rounded-lg bg-muted/50">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500">
+                  <Calendar className="h-5 w-5 text-white" />
+                </div>
+                <div className="space-y-1 flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-none truncate">Client Presentation rescheduled</p>
+                  <p className="text-xs text-muted-foreground">Yesterday</p>
+                  <Badge variant="outline" className="text-xs">Schedule Change</Badge>
+                </div>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Upcoming Meetings */}
+        <Card className="lg:col-span-3">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Upcoming Meetings</CardTitle>
+              <CardDescription>Next scheduled meetings</CardDescription>
+            </div>
+            <Button variant="ghost" size="sm">
+              View All
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors cursor-pointer">
+                <div className="text-center shrink-0">
+                  <p className="text-lg font-bold">15</p>
+                  <p className="text-xs text-muted-foreground">Dec</p>
+                </div>
+                <div className="space-y-1 flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-none truncate">Product Review</p>
+                  <p className="text-xs text-muted-foreground">2:00 PM - 3:30 PM</p>
+                  <div className="flex items-center justify-between">
+                    <Badge variant="secondary" className="text-xs">Product</Badge>
+                    <span className="text-xs text-blue-600">5 participants</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors cursor-pointer">
+                <div className="text-center shrink-0">
+                  <p className="text-lg font-bold">16</p>
+                  <p className="text-xs text-muted-foreground">Dec</p>
+                </div>
+                <div className="space-y-1 flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-none truncate">Design Sprint Planning</p>
+                  <p className="text-xs text-muted-foreground">10:00 AM - 12:00 PM</p>
+                  <div className="flex items-center justify-between">
+                    <Badge variant="secondary" className="text-xs">Design</Badge>
+                    <span className="text-xs text-blue-600">8 participants</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3 p-3 rounded-lg border hover:bg-muted/50 transition-colors cursor-pointer">
+                <div className="text-center shrink-0">
+                  <p className="text-lg font-bold">17</p>
+                  <p className="text-xs text-muted-foreground">Dec</p>
+                </div>
+                <div className="space-y-1 flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-none truncate">Client Presentation</p>
+                  <p className="text-xs text-muted-foreground">3:00 PM - 4:00 PM</p>
+                  <div className="flex items-center justify-between">
+                    <Badge variant="secondary" className="text-xs">Client</Badge>
+                    <span className="text-xs text-blue-600">12 participants</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+          <CardDescription>Get started with common tasks</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Button 
+              variant="outline" 
+              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-blue-50 dark:hover:bg-blue-950"
+            >
+              <Calendar className="h-6 w-6 text-blue-500" />
+              <span className="text-sm font-medium">Schedule Meeting</span>
+            </Button>
             
-            <div className="mt-6">
-              <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">Meeting Buddy Dashboard</h1>
-              <p className="mt-1 text-slate-500 dark:text-slate-400">Manage and prepare for upcoming meetings with AI assistance</p>
-            </div>
-
-          <div className="mt-6 lg:px-4">
-            <MeetingDashboardCards />
-          </div>            <div className="mt-8">
-              <Tabs defaultValue="upcoming">
-                <TabsList>
-                  <TabsTrigger value="upcoming">
-                    <svg className="mr-1" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M16 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M8 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M3 10H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    Upcoming Meetings
-                  </TabsTrigger>
-                  <TabsTrigger value="insights">
-                    <svg className="mr-1" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 20V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M18 20V4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M6 20V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    Insights
-                  </TabsTrigger>
-                  <TabsTrigger value="tasks">
-                    <svg className="mr-1" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9 11L12 14L22 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    Action Items
-                  </TabsTrigger>
-                  <TabsTrigger value="history">
-                    <svg className="mr-1" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M3.05078 11.0002C3.27003 9.4749 3.87008 8.03251 4.78408 6.82508C5.69807 5.61765 6.89368 4.68671 8.2539 4.13463C9.61412 3.58254 11.0871 3.4329 12.5215 3.70561C13.956 3.97832 15.2911 4.66352 16.3583 5.68228L20.9998 10.0002" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M21 4V10H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M20.9492 13.0002C20.73 14.5255 20.1299 15.9679 19.2159 17.1753C18.3019 18.3828 17.1063 19.3137 15.7461 19.8658C14.3859 20.4179 12.9129 20.5675 11.4785 20.2948C10.044 20.0221 8.70893 19.3369 7.64171 18.3181L3.00021 14.0002" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M3 20V14H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    Past Meetings
-                  </TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="upcoming" className="mt-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="lg:col-span-2 space-y-6">
-                      <Card>
-                        <CardHeader>
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <CardTitle>Next Meeting: Q4 Planning</CardTitle>
-                              <CardDescription className="mt-1">Today at 2:00 PM · 60 minutes · Conference Room A</CardDescription>
-                            </div>
-                            <Badge className="bg-teal-50 text-teal-600 border-teal-200 hover:bg-teal-100">
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 rounded-full bg-white"></span>
-                                <span>In 3 hours</span>
-                              </span>
-                            </Badge>
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            <Accordion title="Meeting Agenda">
-                              <div className="space-y-3">
-                                <div className="flex items-center gap-2 text-sm">
-                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-600">1</div>
-                                  <div>Q4 Sales Projections - <span className="text-slate-500">Alex (15 min)</span></div>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-600">2</div>
-                                  <div>Marketing Strategy - <span className="text-slate-500">Jamie (20 min)</span></div>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm">
-                                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-600">3</div>
-                                  <div>Budget Allocation - <span className="text-slate-500">Morgan (25 min)</span></div>
-                                </div>
-                              </div>
-                            </Accordion>
-                            
-                            <div>
-                              <h4 className="font-medium mb-3">Scheduling</h4>
-                              <div className="flex items-start gap-4">
-                                <div className="w-[240px]">
-                                  <DatePicker />
-                                </div>
-                                <div className="flex-1">
-                                  <SchedulingTable />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                        <CardFooter>
-                          <div className="flex justify-between items-center w-full">
-                            <div className="text-sm text-slate-500">5 participants confirmed</div>
-                            <div className="flex -space-x-2">
-                              <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-medium">AJ</div>
-                              <div className="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-medium">TK</div>
-                              <div className="h-8 w-8 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-medium">RB</div>
-                              <div className="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-xs font-medium">MC</div>
-                              <div className="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 text-xs font-medium">+1</div>
-                            </div>
-                          </div>
-                        </CardFooter>
-                      </Card>
-
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Decisions & Action Items</CardTitle>
-                          <CardDescription>Track and manage tasks from previous meetings</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <TasksTable />
-                        </CardContent>
-                      </Card>
-                    </div>
-
-                    <div className="lg:col-span-1 space-y-6">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Meeting Insights</CardTitle>
-                          <CardDescription>Participation trends and effectiveness</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <ChartAreaInteractive />
-                        </CardContent>
-                      </Card>
-
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>AI Suggested Topics</CardTitle>
-                          <CardDescription>Based on previous discussions</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between rounded-lg bg-slate-50 p-2 dark:bg-slate-800/50">
-                              <span className="text-sm">Follow-up on Q3 marketing ROI</span>
-                              <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800">High</Badge>
-                            </div>
-                            <div className="flex items-center justify-between rounded-lg bg-slate-50 p-2 dark:bg-slate-800/50">
-                              <span className="text-sm">New Sales Team Structure</span>
-                              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800">Medium</Badge>
-                            </div>
-                            <div className="flex items-center justify-between rounded-lg bg-slate-50 p-2 dark:bg-slate-800/50">
-                              <span className="text-sm">Product Roadmap Updates</span>
-                              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800">Medium</Badge>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Quick KPIs</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <div className="flex h-8 w-8 items-center justify-center rounded bg-teal-100 text-teal-600 dark:bg-teal-900/40 dark:text-teal-600">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M12 20V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                  <path d="M18 20V4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                  <path d="M6 20V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                              </div>
-                              <div>
-                                <div className="text-sm font-medium">200 Licenses Sold</div>
-                                <div className="text-xs text-slate-500">+12% from last quarter</div>
-                              </div>
-                            </div>
-                            <span className="flex items-center gap-0.5 text-emerald-600 text-sm font-medium">
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 19V5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M5 12L12 5L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                              +12%
-                            </span>
-                          </div>
-                          
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <div className="flex h-8 w-8 items-center justify-center rounded bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M16 21V5C16 4.46957 15.7893 3.96086 15.4142 3.58579C15.0391 3.21071 14.5304 3 14 3H10C9.46957 3 8.96086 3.21071 8.58579 3.58579C8.21071 3.96086 8 4.46957 8 5V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                  <path d="M4 7H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                  <path d="M4 17H8M20 17H12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                              </div>
-                              <div>
-                                <div className="text-sm font-medium">5 New Enterprise Clients</div>
-                                <div className="text-xs text-slate-500">+3 from last quarter</div>
-                              </div>
-                            </div>
-                            <span className="flex items-center gap-0.5 text-emerald-600 text-sm font-medium">
-                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 19V5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M5 12L12 5L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                              +60%
-                            </span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="insights" className="mt-4">
-                  <div className="grid grid-cols-1 gap-6">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Performance Analytics</CardTitle>
-                        <CardDescription>Meeting effectiveness and engagement metrics</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="h-[300px] flex items-center justify-center text-slate-500">
-                          Advanced charts and analytics data will be displayed here
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="tasks" className="mt-4">
-                  <div className="grid grid-cols-1 gap-6">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Action Items</CardTitle>
-                        <CardDescription>Track all tasks and decisions from meetings</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <DataTable data={data} />
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="history" className="mt-4">
-                  <div className="grid grid-cols-1 gap-6">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Past Meetings</CardTitle>
-                        <CardDescription>History and summaries of previous meetings</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          <div className="rounded-lg border p-4">
-                            <div className="flex items-center justify-between">
-                              <h4 className="font-medium">Q3 Review</h4>
-                              <span className="text-sm text-slate-500">April 18, 2023</span>
-                            </div>
-                            <p className="mt-2 text-sm text-slate-500">Quarterly review meeting with all department heads. Discussion focused on Q3 results and preliminary Q4 planning.</p>
-                            <div className="mt-3 flex justify-end">
-                              <button className="text-xs text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-md px-2 py-1 transition-colors">
-                                View Summary →
-                              </button>
-                            </div>
-                          </div>
-                          <div className="rounded-lg border p-4">
-                            <div className="flex items-center justify-between">
-                              <h4 className="font-medium">Product Roadmap</h4>
-                              <span className="text-sm text-slate-500">April 5, 2023</span>
-                            </div>
-                            <p className="mt-2 text-sm text-slate-500">Product team presented updated roadmap for Q2-Q3. New features timeline approved.</p>
-                            <div className="mt-3 flex justify-end">
-                              <button className="text-xs text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-md px-2 py-1 transition-colors">
-                                View Summary →
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    
-                    <MeetingSummary 
-                      title="Q3 Review Meeting Summary"
-                      date="April 18, 2023"
-                      duration="55 minutes"
-                      aiScore={92}
-                      attendees={[
-                        { name: "Alex Johnson", initials: "AJ", color: "bg-blue-500" },
-                        { name: "Taylor Kim", initials: "TK", color: "bg-purple-500" },
-                        { name: "Robin Banks", initials: "RB", color: "bg-amber-500" },
-                        { name: "Morgan Chen", initials: "MC", color: "bg-emerald-500" },
-                        { name: "Jordan Lee", initials: "JL", color: "bg-rose-500" }
-                      ]}
-                      keyTopics={[
-                        { topic: "Q3 Sales Report", speaker: "Alex Johnson", duration: "15 min", priority: "high" },
-                        { topic: "Marketing Campaign Results", speaker: "Taylor Kim", duration: "20 min", priority: "medium" },
-                        { topic: "Q4 Planning Overview", speaker: "Robin Banks", duration: "20 min", priority: "high" }
-                      ]}
-                      decisions={[
-                        { text: "Increase Q4 marketing budget by 15% to capitalize on Q3 campaign success", owner: "Taylor Kim", dueDate: "May 1, 2023" },
-                        { text: "Approve new sales territory expansion for Northeast region", owner: "Alex Johnson", dueDate: "May 15, 2023" },
-                        { text: "Schedule follow-up meeting for detailed Q4 budget planning", owner: "Robin Banks", dueDate: "April 25, 2023" }
-                      ]}
-                      insights={[
-                        { text: "Team spent 60% of meeting time on strategic discussions vs. 40% on status updates - improved from last quarter's 40/60 split." },
-                        { text: "Sales team participation increased by 25% compared to previous meetings." },
-                        { text: "7 action items were created, with clear owners and deadlines - up from average of 4 in previous meetings." }
-                      ]}
-                    />
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-            </main>
-            <RightPanel />
+            <Button 
+              variant="outline" 
+              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-green-50 dark:hover:bg-green-950"
+            >
+              <Users className="h-6 w-6 text-green-500" />
+              <span className="text-sm font-medium">Create Group</span>
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-purple-50 dark:hover:bg-purple-950"
+            >
+              <MessageSquare className="h-6 w-6 text-purple-500" />
+              <span className="text-sm font-medium">Send Message</span>
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="flex flex-col items-center justify-center h-24 space-y-2 hover:bg-orange-50 dark:hover:bg-orange-950"
+            >
+              <TrendingUp className="h-6 w-6 text-orange-500" />
+              <span className="text-sm font-medium">View Analytics</span>
+            </Button>
           </div>
-        </div>
-        
-        {/* Add the chatbot component */}
-        {/* <MeetupBuddyChatbot 
-          context={{
-            currentPage: 'dashboard',
-            recentMeetings: ['Q4 Planning', 'Team Standup', 'Product Review']
-          }}
-        /> */}
-      </SidebarInset>
-    </SidebarProvider>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

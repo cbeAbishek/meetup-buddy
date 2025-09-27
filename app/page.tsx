@@ -7,6 +7,8 @@ import {
   CardTitle,
   CardContent,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { supabase } from "@/lib/supabase";
 import { Hero } from "@/components/hero";
@@ -42,23 +44,43 @@ function SupabaseTester() {
   }, [table])
 
   return (
-    <div className="max-w-xl">
-      <div className="flex gap-2 mb-3">
-        <input value={table} onChange={(e) => setTable(e.target.value)} className="flex-1 border px-3 py-2 rounded" placeholder="table name (e.g. users)" />
-        <Button onClick={runTest} disabled={loading}>
-          {loading ? 'Running...' : 'Test Supabase'}
-        </Button>
-      </div>
-
-      {error && <div className="text-sm text-red-600 mb-2">Error: {error}</div>}
-
-      {rows && (
-        <div className="bg-white border rounded p-3">
-          <div className="text-sm text-slate-600 mb-2">Rows (showing up to 10):</div>
-          <pre className="text-xs overflow-auto max-h-64">{JSON.stringify(rows, null, 2)}</pre>
+    <Card className="max-w-xl">
+      <CardHeader>
+        <CardTitle>Supabase Connection Test</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex gap-2 mb-3">
+          <Input 
+            value={table} 
+            onChange={(e) => setTable(e.target.value)} 
+            placeholder="table name (e.g. users)" 
+            className="flex-1"
+          />
+          <Button onClick={runTest} disabled={loading}>
+            {loading ? 'Running...' : 'Test Supabase'}
+          </Button>
         </div>
-      )}
-    </div>
+
+        {error && (
+          <Alert variant="destructive" className="mb-3">
+            <AlertDescription>Error: {error}</AlertDescription>
+          </Alert>
+        )}
+
+        {rows && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Rows (showing up to 10):</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <pre className="text-xs overflow-auto max-h-64 bg-muted p-2 rounded">
+                {JSON.stringify(rows, null, 2)}
+              </pre>
+            </CardContent>
+          </Card>
+        )}
+      </CardContent>
+    </Card>
   )
 }
 
