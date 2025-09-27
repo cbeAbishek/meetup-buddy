@@ -1,180 +1,274 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react"
+  LayoutDashboard,
+  Notebook,
+  Calendar,
+  ListTodo,
+  Bell,
+  Users,
+  MessageSquare,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react"
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { useSidebar } from "@/components/ui/sidebar"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarSeparator,
 } from "@/components/ui/sidebar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { NavUser } from "@/components/nav-user"
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+// Navigation items configuration - meeting focused items
+const navigationItems = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    href: "/dashboard",
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
-    },
-    {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
+  {
+    title: "Agenda",
+    icon: Notebook,
+    href: "/dashboard/agenda",
+  },
+  {
+    title: "Groups",
+    icon: Users,
+    href: "/dashboard/groups",
+  },
+  {
+    title: "Calendar",
+    icon: Calendar,
+    href: "/dashboard/calendar",
+  },
+  {
+    title: "Chats",
+    icon: MessageSquare,
+    href: "/dashboard/chats",
+  },
+  {
+    title: "Scheduling",
+    icon: Calendar,
+    href: "/dashboard/scheduling",
+  },
+  {
+    title: "Follow-ups",
+    icon: ListTodo,
+    href: "/dashboard/follow-ups",
+  },
+  {
+    title: "Reminders",
+    icon: Bell,
+    href: "/dashboard/reminders",
+  }
+]
+
+// Footer items removed per request
+const footerItems: Array<{ title: string; icon?: React.ElementType; href?: string }> = []
+
+// Custom Toggle Button with smooth animations and position changes
+function AnimatedSidebarTrigger() {
+  const { state, toggleSidebar } = useSidebar()
+  const isCollapsed = state === "collapsed"
+
+  return (
+    <div className={cn(
+      "flex items-center transition-all duration-500 ease-in-out w-full",
+      isCollapsed ? "justify-start" : "justify-end"
+    )}>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size={isCollapsed ? "icon" : "sm"}
+              onClick={toggleSidebar}
+              className={cn(
+                "transition-all duration-500 ease-in-out rounded-lg",
+                "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                "focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+                "group relative overflow-hidden",
+                isCollapsed ? "h-8 w-8" : "h-8 px-3 gap-2"
+              )}
+            >
+              <div className="relative transition-transform duration-500 ease-in-out">
+                <ChevronLeft 
+                  className={cn(
+                    "h-4 w-4 transition-all duration-500 ease-in-out",
+                    isCollapsed ? "rotate-180" : "rotate-0"
+                  )}
+                />
+              </div>
+              
+              {/* Animated text that appears/disappears */}
+              <span className={cn(
+                "text-xs font-medium transition-all duration-500 ease-in-out overflow-hidden whitespace-nowrap",
+                isCollapsed 
+                  ? "w-0 opacity-0 translate-x-2" 
+                  : "w-auto opacity-100 translate-x-0"
+              )}>
+                Close
+              </span>
+              
+              <div className={cn(
+                "absolute inset-0 bg-sidebar-primary rounded-lg transition-all duration-300 ease-in-out",
+                "scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-10"
+              )} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right" className="text-xs">
+            {isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+  )
+}
+
+// Enhanced Menu Item with smooth animations
+interface AnimatedMenuItemProps {
+  item: {
+    title: string
+    icon: React.ElementType
+    href: string
+  }
+  isActive: boolean
+}
+
+function AnimatedMenuItem({ item, isActive }: AnimatedMenuItemProps) {
+  const { state } = useSidebar()
+  const isCollapsed = state === "collapsed"
+
+  if (isCollapsed) {
+    return (
+      <SidebarMenuItem>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SidebarMenuButton 
+                asChild 
+                isActive={isActive}
+                className={cn(
+                  "transition-all duration-300 ease-in-out",
+                  "hover:scale-105 active:scale-95",
+                  isActive && "bg-teal-50 dark:bg-teal-900/40 shadow-sm ring-1 ring-teal-600/20 dark:ring-teal-600/25 border-l-4 border-teal-600"
+                )}
+              >
+                <Link href={item.href}>
+                  <item.icon className={cn(
+                    "h-4 w-4 transition-transform duration-200",
+                    isActive && "text-[color:var(--primary)]"
+                  )} />
+                </Link>
+              </SidebarMenuButton>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="text-xs font-medium">
+              {item.title}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </SidebarMenuItem>
+    )
+  }
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton 
+        asChild 
+        isActive={isActive}
+        className={cn(
+          "transition-all duration-300 ease-in-out",
+          "hover:scale-[1.02] active:scale-98",
+          "group relative overflow-hidden",
+          isActive && "bg-teal-50 dark:bg-teal-900/40 shadow-sm ring-1 ring-teal-600/20 dark:ring-teal-600/25 border-l-4 border-teal-600"
+        )}
+      >
+        <Link href={item.href} className="flex items-center gap-3">
+          <item.icon className={cn(
+            "h-4 w-4 transition-transform duration-200 group-hover:scale-110",
+            isActive && "text-[color:var(--primary)]"
+          )} />
+          <span className={cn(
+            "transition-all duration-300 ease-in-out",
+            "transform translate-x-0 opacity-100",
+            isActive && "text-[color:var(--primary)] font-semibold"
+          )}>
+            {item.title}
+          </span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname()
+
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+    <Sidebar 
+      collapsible="icon" 
+      className="transition-all duration-500 ease-in-out border-r border-sidebar-border"
+      {...props}
+    >
+      <SidebarHeader className="transition-all duration-500 ease-in-out">
+        <div className="flex items-center px-3 py-3">
+          <AnimatedSidebarTrigger />
+        </div>
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+      
+      <SidebarContent className="transition-all duration-500 ease-in-out">
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-1">
+              {navigationItems.map((item) => (
+                <AnimatedMenuItem
+                  key={item.href}
+                  item={item}
+                  isActive={pathname === item.href}
+                />
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        
+        <SidebarSeparator className="transition-all duration-500 ease-in-out" />
+        
+        <SidebarGroup>
+          <SidebarGroupContent>
+              <SidebarMenu className="space-y-1">
+                {footerItems.length > 0 && footerItems.filter(i => i.href && i.icon).map((item) => (
+                  <AnimatedMenuItem
+                    key={item.href!}
+                    item={item as { title: string; icon: React.ElementType; href: string }}
+                    isActive={pathname === item.href}
+                  />
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
+      
+      <SidebarFooter className="transition-all duration-500 ease-in-out">
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

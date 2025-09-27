@@ -1,5 +1,7 @@
-'use client'
-import React, { useRef, useState, useEffect } from 'react'
+"use client"
+import * as React from 'react'
+import { useRouter } from 'next/navigation'
+import { useRef, useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,6 +14,7 @@ const supabase = createClient(
 )
 
 export default function Page() {
+    const router = useRouter()
     const fileRef = useRef<HTMLInputElement | null>(null)
     const [fileName, setFileName] = useState<string | null>(null)
     const [status, setStatus] = useState<string | null>(null)
@@ -123,9 +126,18 @@ export default function Page() {
         }
     }
 
-    return (
-        <div style={{ maxWidth: 520, margin: 24 }}>
-            <Label htmlFor="file">Upload file</Label>
+        return (
+                <div style={{ maxWidth: 720, margin: 24 }}>
+                        <div className="flex items-center gap-4 mb-4">
+                            <button aria-label="go-back" onClick={() => router.back()} className="inline-flex items-center justify-center h-10 w-10 rounded-lg border bg-background">
+                                ←
+                            </button>
+                            <div className="flex-1">
+                                <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Files & Uploads</h1>
+                                <p className="mt-1 text-base font-medium text-muted-foreground">Manage uploaded assets and downloads</p>
+                            </div>
+                        </div>
+                        <Label htmlFor="file">Upload file</Label>
             <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <input
                     id="file"

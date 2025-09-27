@@ -1,249 +1,353 @@
 "use client"
 
 import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { supabase, isSupabaseConfigured, SUPABASE_URL } from '@/lib/supabase'
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { useAuth } from '@/lib/auth-context'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+import { Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 export default function AuthForm() {
+  const { signIn, signUp, loading, user } = useAuth()
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [showSql, setShowSql] = useState(false)
-  const [rawResponse, setRawResponse] = useState<any | null>(null)
 
-  // Helper: extract user id from various Supabase auth responses
-  function extractUserIdFromAuthResponse(resp: any) {
-    if (!resp) return null
-    // Supabase v2 may return { data: { user } } or { data: { session, user } }
-    const maybeUser = resp.user ?? resp.data?.user ?? resp.data?.session?.user ?? resp
-    return maybeUser?.id ?? null
+  // Don't show the form if user is already authenticated
+  if (user) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="max-w-md mx-auto border-teal-200 shadow-xl">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4"
+              >
+                <CheckCircle2 className="w-8 h-8 text-teal-600" />
+              </motion.div>
+              <p className="text-teal-700 bg-teal-50 p-4 rounded-xl border border-teal-200">
+                You are already signed in. Redirecting to dashboard...
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    )
   }
 
   async function handleSignUp() {
     setError(null)
     setMessage(null)
-    setShowSql(false)
-    setLoading(true)
-    // Quick config check
+
     if (!isSupabaseConfigured) {
-      setError('Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local')
-      setLoading(false)
+      setError('Supabase is not configured. Please check your environment variables.')
       return
     }
-    // Basic input validation
-    if (!email || !password) {
-      setError('Email and password are required')
-      setLoading(false)
+
+    if (!name.trim()) {
+      setError('Full name is required')
       return
     }
+
+    if (!email.trim()) {
+      setError('Email is required')
+      return
+    }
+
+    if (!password.trim()) {
+      setError('Password is required')
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long')
+      return
+    }
+
     try {
-      // Use supabase directly for clearer response shape
-      const res = await supabase.auth.signUp({ email, password })
+      const { error: signUpError } = await signUp(email, password, { full_name: name })
 
-      // Save/debug the full response so UI can display it for debugging
-      setRawResponse(res)
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.debug('supabase.signUp response:', res)
-      }
-
-      // If there's an error, handle existing-user case or show error
-      if (res.error) {
-        const msg = res.error.message ?? String(res.error)
-        // If user already exists, attempt sign-in
+      if (signUpError) {
+        const msg = signUpError.message ?? String(signUpError)
         if (/already exists|duplicate|user exists|User already registered/i.test(msg)) {
-          const signInRes = await supabase.auth.signInWithPassword({ email, password })
-          setRawResponse(signInRes)
-          if (process.env.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.debug('supabase.signIn (existing user) response:', signInRes)
-          }
-          if (signInRes.error) {
-            setError(signInRes.error.message ?? String(signInRes.error))
+          const { error: signInError } = await signIn(email, password)
+          if (signInError) {
+            setError('This email is already registered. Please sign in instead.')
+            setTimeout(() => setMode('signin'), 2000)
             return
           }
-          const userId = extractUserIdFromAuthResponse(signInRes.data ?? signInRes)
-          if (userId) {
-            // Ensure profile exists
-            const { error: profileError } = await supabase.from('profiles').upsert({ id: userId, email, full_name: name || null })
-            if (profileError) {
-              const pm = profileError.message ?? String(profileError)
-              if (/relation|does not exist|no such table/i.test(pm)) {
-                setShowSql(true)
-                setError('Profiles table not found in your database.')
-              } else {
-                setError(pm)
-              }
-              return
-            }
-            setMessage('Existing user signed in and profile upserted.')
-            return
-          }
+          console.log('Existing user signed in successfully')
+          return
         }
-
         setError(msg)
         return
       }
 
-  // No immediate error. Extract user id if available.
-  const userId = extractUserIdFromAuthResponse(res.data ?? res)
+      console.log('Sign up successful, waiting for auth state change...')
+      
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { error: profileError } = await supabase.from('profiles').upsert({
+            id: user.id,
+            email,
+            full_name: name || null
+          })
 
-      if (userId) {
-        // user created and available: upsert profile
-        const { error: profileError } = await supabase.from('profiles').upsert({ id: userId, email, full_name: name || null }).select()
-        if (profileError) {
-          const pm = profileError.message ?? String(profileError)
-          if (/relation|does not exist|no such table/i.test(pm)) {
-            setShowSql(true)
-            setError('Profiles table not found in your database.')
-          } else {
-            setError(pm)
+          if (profileError) {
+            console.log('Profile creation error (non-critical):', profileError)
           }
-          return
         }
-
-        setMessage('Sign-up successful. Profile created/updated.')
-      } else {
-        // No user id present — likely email confirmation required
-        setMessage('Sign-up initiated. Check your email to confirm your account. Profile will be created after confirmation.')
+      } catch (profileError) {
+        console.log('Profile creation error (non-critical):', profileError)
       }
     } catch (err: any) {
-      setError(err?.message ?? String(err))
-    } finally {
-      setLoading(false)
+      setError(err?.message ?? 'An unexpected error occurred. Please try again.')
     }
   }
 
   async function handleSignIn() {
     setError(null)
     setMessage(null)
-    setLoading(true)
+
     if (!isSupabaseConfigured) {
-      setError('Supabase not configured. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local')
-      setLoading(false)
+      setError('Supabase is not configured. Please check your environment variables.')
       return
     }
-    if (!email || !password) {
-      setError('Email and password are required')
-      setLoading(false)
+
+    if (!email.trim()) {
+      setError('Email is required')
       return
     }
+
+    if (!password.trim()) {
+      setError('Password is required')
+      return
+    }
+
     try {
-  const res = await supabase.auth.signInWithPassword({ email, password })
-  setRawResponse(res)
-      if (res.error) {
-        if (process.env.NODE_ENV !== 'production') {
-          // eslint-disable-next-line no-console
-          console.debug('supabase.signInWithPassword response (error):', res)
+      const { error } = await signIn(email, password)
+      if (error) {
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password. Please check your credentials and try again.')
+        } else {
+          setError(error.message ?? 'Sign in failed. Please try again.')
         }
-        setError(res.error.message ?? String(res.error))
         return
       }
 
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.debug('supabase.signInWithPassword response (success):', res)
-      }
-
-      const userId = extractUserIdFromAuthResponse(res.data ?? res)
-      if (userId) {
-        // Ensure profile exists for this user
-        const { error: profileError } = await supabase.from('profiles').upsert({ id: userId, email, full_name: name || null })
-        if (profileError) {
-          const pm = profileError.message ?? String(profileError)
-          if (/relation|does not exist|no such table/i.test(pm)) {
-            setShowSql(true)
-            setError('Profiles table not found in your database.')
-          } else {
-            setError(pm)
-          }
-          return
-        }
-      }
-
-      setMessage('Signed in successfully.')
+      console.log('Sign in successful, waiting for auth state change...')
     } catch (err: any) {
-      setError(err?.message ?? String(err))
-    } finally {
-      setLoading(false)
+      setError(err?.message ?? 'An unexpected error occurred. Please try again.')
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (mode === 'signup') await handleSignUp()
-    else await handleSignIn()
+    if (mode === 'signup') {
+      await handleSignUp()
+    } else {
+      await handleSignIn()
+    }
   }
 
-  const sqlSnippet = `-- Run this in Supabase SQL editor to create a simple profiles table\nCREATE TABLE profiles (\n  id uuid PRIMARY KEY,\n  email text UNIQUE,\n  full_name text,\n  created_at timestamptz DEFAULT now()\n);`
-
   return (
-    <Card className="max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>{mode === 'signup' ? 'Create account' : 'Sign in'}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          {mode === 'signup' && (
-            <input
-              placeholder="Full name (optional)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="border px-3 py-2 rounded"
-            />
-          )}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+      className="w-full"
+    >
+      <Card className="w-full max-w-s mx-auto border-teal-200 shadow-2xl bg-white/95 backdrop-blur-sm">
+        <CardHeader className="text-center pb-8 pt-8">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="w-20 h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+          >
+            <User className="w-10 h-10 text-white" />
+          </motion.div>
+          <CardTitle className="text-3xl font-bold text-slate-900 mb-2">
+            {mode === 'signup' ? 'Create Account' : 'Welcome Back'}
+          </CardTitle>
+          <CardDescription className="text-slate-600 text-lg">
+            {mode === 'signup' 
+              ? 'Join MeetupBuddy and transform your meetings' 
+              : 'Sign in to access your dashboard'
+            }
+          </CardDescription>
+        </CardHeader>
 
-          <input
-            placeholder="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border px-3 py-2 rounded"
-            required
-          />
+        <CardContent className="space-y-8 px-8 pb-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {mode === 'signup' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-3"
+              >
+                <Label htmlFor="name" className="text-slate-700 font-semibold text-base">
+                  Full Name
+                </Label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                  <Input
+                    id="name"
+                    placeholder="Enter your full name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="pl-12 pr-4 border-slate-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 h-14 text-base transition-all duration-300"
+                    required={mode === 'signup'}
+                  />
+                </div>
+              </motion.div>
+            )}
 
-          <input
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border px-3 py-2 rounded"
-            required
-          />
+            <div className="space-y-3">
+              <Label htmlFor="email" className="text-slate-700 font-semibold text-base">
+                Email Address
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <Input
+                  id="email"
+                  placeholder="Enter your email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-12 pr-4 border-slate-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 h-14 text-base transition-all duration-300"
+                  required
+                />
+              </div>
+            </div>
 
-          <div className="flex gap-2">
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Working...' : mode === 'signup' ? 'Create account' : 'Sign in'}
-            </Button>
-            <Button variant="outline" type="button" onClick={() => setMode(mode === 'signup' ? 'signin' : 'signup')}>
-              {mode === 'signup' ? 'Have an account? Sign in' : "Don't have an account? Sign up"}
-            </Button>
+            <div className="space-y-3">
+              <Label htmlFor="password" className="text-slate-700 font-semibold text-base">
+                Password
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <Input
+                  id="password"
+                  placeholder={mode === 'signup' ? 'Create a password (min. 6 characters)' : 'Enter your password'}
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-12 pr-12 border-slate-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 h-14 text-base transition-all duration-300"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {mode === 'signup' && (
+                <p className="text-sm text-slate-500 mt-1">
+                  Password must be at least 6 characters long
+                </p>
+              )}
+            </div>
+
+            {/* Error Alert */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Alert className="border-red-200 bg-red-50 p-4">
+                  <AlertCircle className="h-5 w-5 text-red-600" />
+                  <AlertDescription className="text-red-700 text-base ml-2">
+                    {error}
+                  </AlertDescription>
+                </Alert>
+              </motion.div>
+            )}
+
+            {/* Success Message */}
+            {message && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Alert className="border-teal-200 bg-teal-50 p-4">
+                  <CheckCircle2 className="h-5 w-5 text-teal-600" />
+                  <AlertDescription className="text-teal-700 text-base ml-2">
+                    {message}
+                  </AlertDescription>
+                </Alert>
+              </motion.div>
+            )}
+
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="pt-2"
+            >
+              <Button 
+                type="submit" 
+                disabled={loading}
+                className="w-full h-14 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+              >
+                {loading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Please wait...</span>
+                  </div>
+                ) : (
+                  mode === 'signup' ? 'Create Account' : 'Sign In'
+                )}
+              </Button>
+            </motion.div>
+          </form>
+
+          {/* Mode Switch */}
+          <div className="text-center pt-6 border-t border-slate-200">
+            <p className="text-slate-600 mb-4 text-base">
+              {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}
+            </p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              type="button"
+              onClick={() => {
+                setMode(mode === 'signup' ? 'signin' : 'signup')
+                setError(null)
+                setMessage(null)
+                setEmail('')
+                setPassword('')
+                setName('')
+              }}
+              disabled={loading}
+              className="text-teal-600 hover:text-teal-700 font-semibold text-base transition-colors duration-200 disabled:opacity-50 px-4 py-2 rounded-lg hover:bg-teal-50"
+            >
+              {mode === 'signup' ? 'Sign In Instead' : 'Create New Account'}
+            </motion.button>
           </div>
-
-          {message && <div className="text-sm text-green-700">{message}</div>}
-          {error && <div className="text-sm text-red-600">{error}</div>}
-
-          {showSql && (
-            <div className="mt-3 bg-slate-50 p-3 rounded border">
-              <div className="text-sm mb-2">Profiles table missing — run this SQL in Supabase SQL editor:</div>
-              <pre className="text-xs overflow-auto whitespace-pre-wrap">{sqlSnippet}</pre>
-            </div>
-          )}
-
-          {/* Dev-only: show raw Supabase response to help debug 400s */}
-          {rawResponse && (
-            <div className="mt-3 bg-black/5 p-3 rounded border">
-              <div className="text-sm mb-2">Raw Supabase response (dev):</div>
-              <pre className="text-xs overflow-auto max-h-48">{JSON.stringify(rawResponse, null, 2)}</pre>
-            </div>
-          )}
-        </form>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
   )
 }

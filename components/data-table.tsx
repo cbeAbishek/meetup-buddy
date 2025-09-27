@@ -401,6 +401,37 @@ export function DataTable({
     }
   }
 
+  // Defensive local references: some TanStack row models may be undefined
+  // briefly during renders; normalize to empty arrays to avoid runtime errors.
+  // Wrap in try/catch and validate the shapes to avoid `Cannot read properties of undefined (reading 'length')`.
+  let rows: any[] = []
+  let filteredRows: any[] = []
+  let filteredSelectedRows: any[] = []
+
+  try {
+    const _rowModel = table?.getRowModel?.() as { rows?: any[] } | undefined
+    if (_rowModel && Array.isArray(_rowModel.rows)) {
+      rows = _rowModel.rows
+    }
+
+    const _filteredRowModel = table?.getFilteredRowModel?.() as { rows?: any[] } | undefined
+    if (_filteredRowModel && Array.isArray(_filteredRowModel.rows)) {
+      filteredRows = _filteredRowModel.rows
+    }
+
+    const _filteredSelectedRowModel = table?.getFilteredSelectedRowModel?.() as { rows?: any[] } | undefined
+    if (_filteredSelectedRowModel && Array.isArray(_filteredSelectedRowModel.rows)) {
+      filteredSelectedRows = _filteredSelectedRowModel.rows
+    }
+  } catch (err) {
+    // If TanStack internals throw during transient states, log and continue with empty arrays
+    // eslint-disable-next-line no-console
+    console.warn("DataTable: error reading row models, falling back to empty arrays", err)
+    rows = []
+    filteredRows = []
+    filteredSelectedRows = []
+  }
+
   return (
     <Tabs
       defaultValue="outline"
@@ -507,12 +538,12 @@ export function DataTable({
                 ))}
               </TableHeader>
               <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                {table.getRowModel().rows?.length ? (
+                {rows.length ? (
                   <SortableContext
                     items={dataIds}
                     strategy={verticalListSortingStrategy}
                   >
-                    {table.getRowModel().rows.map((row) => (
+                    {rows.map((row) => (
                       <DraggableRow key={row.id} row={row} />
                     ))}
                   </SortableContext>
@@ -532,8 +563,8 @@ export function DataTable({
         </div>
         <div className="flex items-center justify-between px-4">
           <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {filteredSelectedRows.length} of{" "}
+            {filteredRows.length} row(s) selected.
           </div>
           <div className="flex w-full items-center gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">

@@ -5,8 +5,8 @@ import {
   IconFolder,
   IconShare3,
   IconTrash,
-  type Icon,
 } from "@tabler/icons-react"
+import type { ComponentType, SVGProps } from "react"
 
 import {
   DropdownMenu,
@@ -31,7 +31,8 @@ export function NavDocuments({
   items: {
     name: string
     url: string
-    icon: Icon
+    // SVG icon component from tabler-icons-react or any SVG component
+    icon: ComponentType<SVGProps<SVGSVGElement>>
   }[]
 }) {
   const { isMobile } = useSidebar()
@@ -49,15 +50,15 @@ export function NavDocuments({
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction
-                  showOnHover
-                  className="data-[state=open]:bg-accent rounded-sm"
-                >
-                  <IconDots />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuAction
+                    showOnHover
+                    className="data-[state=open]:bg-teal-50 data-[state=open]:text-[color:var(--primary)] data-[state=open]:ring-1 data-[state=open]:ring-teal-600/20 data-[state=open]:border-l-4 data-[state=open]:border-teal-600 rounded-sm"
+                  >
+                    <IconDots />
+                    <span className="sr-only">More</span>
+                  </SidebarMenuAction>
+                </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-24 rounded-lg"
                 side={isMobile ? "bottom" : "right"}
