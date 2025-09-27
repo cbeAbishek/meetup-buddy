@@ -1,26 +1,13 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-// Card components not used in this page; removed to avoid unused import errors
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import {
-  Send,
-  Search,
-  MoreVertical,
-  Phone,
-  Video,
-import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState, useRef, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { 
   Send, 
   Search, 
@@ -29,24 +16,18 @@ import {
   MoreHorizontal,
   Paperclip,
   Smile,
-  Mic,
-  Check,
-  Clock,
   Users,
   Hash,
   Plus,
   Settings,
-  Pin,
-  Reply,
-  Forward
   Star,
-  Archive
+  Archive,
+  Check,
+  Clock,
+  Crown
 } from 'lucide-react'
-import { useAuth } from '@/lib/auth-context'
-import { cn } from '@/lib/utils'
-import { ProtectedRoute } from '@/components/protected-route'
 
-// Mock data types
+// Type definitions
 interface User {
   id: string
   name: string
@@ -61,49 +42,34 @@ interface User {
 interface Message {
   id: string
   senderId: string
+  sender: string
   content: string
-  timestamp: Date
+  timestamp: string
   type: 'text' | 'image' | 'file' | 'voice' | 'system'
   status: 'sending' | 'sent' | 'delivered' | 'read'
+  isOwnMessage: boolean
+  avatar?: string
   replyTo?: string
   reactions?: { emoji: string; users: string[] }[]
 }
 
-interface ChatRoom {
-  id: string
+interface Conversation {
+  id: number
   name: string
-  type: 'direct' | 'group'
-  avatar?: string
-  participants: User[]
-  lastMessage?: Message
+  lastMessage: string
+  lastMessageTime: string
   unreadCount: number
-  isPinned: boolean
-  isArchived: boolean
-  groupLeader?: string
+  isGroup: boolean
+  avatar: string
+  color: string
+  isOnline: boolean
+  type: 'group' | 'direct'
+  participants?: User[]
   description?: string
 }
 
 // Mock data
-const mockUsers: User[] = [
-  { id: '1', name: 'Sarah Johnson', role: 'host', status: 'online', avatar: '/avatars/sarah.jpg', email: 'sarah@company.com', department: 'Management' },
-  { id: '2', name: 'Mike Chen', role: 'leader', status: 'online', avatar: '/avatars/mike.jpg', email: 'mike@company.com', department: 'Engineering' },
-  { id: '3', name: 'Emily Davis', role: 'member', status: 'away', avatar: '/avatars/emily.jpg', email: 'emily@company.com', department: 'Marketing' },
-  { id: '4', name: 'Alex Rodriguez', role: 'member', status: 'offline', lastSeen: new Date('2024-01-15T10:30:00'), email: 'alex@company.com', department: 'Sales' },
-  { id: '5', name: 'Jessica Wang', role: 'leader', status: 'online', avatar: '/avatars/jessica.jpg', email: 'jessica@company.com', department: 'Product' },
-  { id: '6', name: 'David Kim', role: 'member', status: 'online', avatar: '/avatars/david.jpg', email: 'david@company.com', department: 'Engineering' },
-]
-
-const mockMessages: Message[] = [
-  {
-    id: '1',
-    senderId: '2',
-    content: 'Hey team! Ready for tomorrow\'s quarterly review meeting?',
-    timestamp: new Date('2024-01-15T09:00:00'),
-    type: 'text',
-    status: 'read'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-
-const conversations = [
+const conversations: Conversation[] = [
   {
     id: 1,
     name: "Engineering Team",
@@ -166,77 +132,83 @@ const conversations = [
   }
 ]
 
-const messages = [
+const initialMessages: Message[] = [
   {
-    id: 1,
+    id: "1",
+    senderId: "alice",
     sender: "Alice Johnson",
     content: "Hey everyone! Just wanted to share an update on the Q4 project. We're making great progress and should be on track for the December deadline.",
     timestamp: "10:30 AM",
+    type: "text",
+    status: "read",
     isOwnMessage: false,
     avatar: "/avatars/alice.png"
   },
   {
-    id: 2,
+    id: "2",
+    senderId: "current-user",
     sender: "You",
     content: "That's fantastic news! The client will be thrilled to hear about the progress.",
     timestamp: "10:32 AM",
+    type: "text",
+    status: "read",
     isOwnMessage: true,
     avatar: "/avatars/you.png"
   },
   {
-    id: 3,
+    id: "3",
+    senderId: "bob",
     sender: "Bob Smith",
     content: "I agree! The team has been doing outstanding work. Should we schedule a client presentation for next week?",
     timestamp: "10:35 AM",
+    type: "text",
+    status: "read",
     isOwnMessage: false,
     avatar: "/avatars/bob.png"
   },
   {
-    id: 4,
+    id: "4",
+    senderId: "alice",
     sender: "Alice Johnson",
     content: "Great idea! I'll coordinate with the client and find a suitable time that works for everyone.",
     timestamp: "10:37 AM",
+    type: "text",
+    status: "read",
     isOwnMessage: false,
     avatar: "/avatars/alice.png"
   },
   {
-    id: 5,
+    id: "5",
+    senderId: "current-user",
     sender: "You",
     content: "Perfect. I'll prepare the presentation materials and demo environment.",
     timestamp: "10:38 AM",
+    type: "text",
+    status: "read",
     isOwnMessage: true,
     avatar: "/avatars/you.png"
   }
 ]
 
-export default function ChatsPage() {
-  return (
-    <ProtectedRoute>
-      <ChatsContent />
-    </ProtectedRoute>
-  )
-}
+const groupMembers = [
+  { name: 'Alice Johnson', status: 'online' },
+  { name: 'Bob Smith', status: 'online' },
+  { name: 'Carol Davis', status: 'offline' },
+  { name: 'David Wilson', status: 'away' }
+]
 
-function ChatsContent() {
-  const [selectedChat, setSelectedChat] = useState<ChatRoom | null>(null)
-  const [messages, setMessages] = useState<Message[]>(mockMessages)
-  const [newMessage, setNewMessage] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isTyping] = useState(false)
-  const [chatRooms] = useState<ChatRoom[]>(mockChatRooms)
+export default function ChatsPage() {
+  const [selectedConversation, setSelectedConversation] = useState<Conversation>(conversations[0])
+  const [messages, setMessages] = useState<Message[]>(initialMessages)
+  const [newMessage, setNewMessage] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  const { user } = useAuth()
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
-export default function ChatPage() {
-  const [selectedConversation, setSelectedConversation] = useState(conversations[0])
-  const [newMessage, setNewMessage] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
 
   const filteredConversations = conversations.filter(conv =>
     conv.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -244,15 +216,32 @@ export default function ChatPage() {
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
-      // Add message logic here
+      const newMsg: Message = {
+        id: Date.now().toString(),
+        senderId: "current-user",
+        sender: "You",
+        content: newMessage.trim(),
+        timestamp: new Date().toLocaleTimeString('en-US', { 
+          hour: 'numeric', 
+          minute: '2-digit',
+          hour12: true 
+        }),
+        type: "text",
+        status: "sent",
+        isOwnMessage: true,
+        avatar: "/avatars/you.png"
+      }
+      
+      setMessages(prev => [...prev, newMsg])
       setNewMessage("")
+      inputRef.current?.focus()
     }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      sendMessage()
+      handleSendMessage()
     }
   }
 
@@ -271,7 +260,7 @@ export default function ChatPage() {
     }
   }
 
-  const getStatusColor = (status: User['status']) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'online':
         return 'bg-green-500'
@@ -279,26 +268,8 @@ export default function ChatPage() {
         return 'bg-yellow-500'
       case 'offline':
         return 'bg-gray-400'
-    }
-  }
-
-  const getRoleIcon = (role: User['role']) => {
-    switch (role) {
-      case 'host':
-        return <Crown className="h-3 w-3 text-yellow-500" />
-      case 'leader':
-        return <Users className="h-3 w-3 text-teal-500" />
       default:
-        return null
-    }
-  }
-
-  // Group creation UI was removed from this page for now; keep chat room state minimal.
-
-  const filteredChats = chatRooms.filter(chat =>
-    chat.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-      handleSendMessage()
+        return 'bg-gray-400'
     }
   }
 
@@ -406,7 +377,7 @@ export default function ChatPage() {
               </h3>
               <p className="text-sm text-muted-foreground">
                 {selectedConversation.isGroup ? 
-                  `${Math.floor(Math.random() * 20) + 5} members` : 
+                  `${groupMembers.length} members` : 
                   selectedConversation.isOnline ? 'Online' : 'Last seen 2h ago'
                 }
               </p>
@@ -474,11 +445,15 @@ export default function ChatPage() {
                     }`}>
                       <p className="text-sm">{message.content}</p>
                     </div>
-                    <p className="text-xs text-muted-foreground">{message.timestamp}</p>
+                    <div className="flex items-center space-x-1">
+                      <p className="text-xs text-muted-foreground">{message.timestamp}</p>
+                      {message.isOwnMessage && getStatusIcon(message.status)}
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
 
@@ -490,6 +465,7 @@ export default function ChatPage() {
             </Button>
             <div className="flex-1">
               <Input
+                ref={inputRef}
                 placeholder="Type a message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
@@ -517,15 +493,18 @@ export default function ChatPage() {
           <div className="p-4">
             <h3 className="font-semibold mb-4">Group Members</h3>
             <div className="space-y-3">
-              {['Alice Johnson', 'Bob Smith', 'Carol Davis', 'David Wilson'].map((member, index) => (
+              {groupMembers.map((member, index) => (
                 <div key={index} className="flex items-center space-x-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback>{member.charAt(0)}</AvatarFallback>
-                  </Avatar>
+                  <div className="relative">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div className={`absolute bottom-0 right-0 w-2.5 h-2.5 ${getStatusColor(member.status)} rounded-full border border-background`}></div>
+                  </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{member}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {Math.random() > 0.5 ? 'Online' : 'Offline'}
+                    <p className="text-sm font-medium truncate">{member.name}</p>
+                    <p className="text-xs text-muted-foreground capitalize">
+                      {member.status}
                     </p>
                   </div>
                 </div>
