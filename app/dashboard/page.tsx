@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { DataTable } from "@/components/data-table"
-import { SectionCards } from "@/components/section-cards"
+import { MeetingDashboardCards } from "@/components/meeting-dashboard-cards"
 import { SiteHeader } from "@/components/site-header"
 import {
   SidebarInset,
@@ -19,15 +19,12 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ProtectedRoute } from "@/components/protected-route"
+import MeetupBuddyChatbot from "@/components/meetup-buddy-chatbot"
 
 import data from "./data.json"
 
 export default function Page() {
-  return (
-    <ProtectedRoute>
-      <DashboardContent />
-    </ProtectedRoute>
-  )
+  return <DashboardContent />
 }
 
 function DashboardContent() {
@@ -35,32 +32,21 @@ function DashboardContent() {
     <SidebarProvider
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-          // teal-600 theme overrides for dashboard
-          "--primary": "#0d9488", // tailwind teal-600
-          "--primary-foreground": "#ffffff",
-          "--accent": "#0d9488",
-          "--accent-foreground": "#ffffff",
-          "--sidebar-primary": "#0d9488",
+          "--sidebar-width": "16rem",
+          "--sidebar-width-icon": "3rem",
+          "--sidebar-primary": "#0d9488", // tailwind teal-600
           "--sidebar-primary-foreground": "#ffffff",
           "--sidebar-accent": "#0d9488",
           "--sidebar-accent-foreground": "#ffffff",
-          "--ring": "#5eead4",
-          "--chart-1": "#0d9488",
-          "--chart-2": "#0891b2",
-          "--chart-3": "#06b6d4",
-          "--chart-4": "#34d399",
-          "--chart-5": "#99f6e4",
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
-      <SidebarInset className="bg-slate-50 dark:bg-slate-950">
+      <AppSidebar />
+      <SidebarInset className="flex flex-col bg-slate-50 dark:bg-slate-950">
         <Navbar />
-        <SiteHeader />
-        <div className="flex flex-1 gap-6">
-          <main className="flex-1 px-6 py-6">
+        <div className="flex-1 overflow-auto">
+          <div className="flex">
+            <main className="flex-1 p-6">
             <div className="flex items-center justify-between">
               <Breadcrumb items={["Dashboard", "Meeting Overview"]} />
               <div className="flex items-center gap-2">
@@ -79,11 +65,9 @@ function DashboardContent() {
               <p className="mt-1 text-slate-500 dark:text-slate-400">Manage and prepare for upcoming meetings with AI assistance</p>
             </div>
 
-            <div className="mt-6">
-              <SectionCards />
-            </div>
-
-            <div className="mt-8">
+          <div className="mt-6 lg:px-4">
+            <MeetingDashboardCards />
+          </div>            <div className="mt-8">
               <Tabs defaultValue="upcoming">
                 <TabsList>
                   <TabsTrigger value="upcoming">
@@ -386,10 +370,18 @@ function DashboardContent() {
                 </TabsContent>
               </Tabs>
             </div>
-          </main>
-
-          <RightPanel />
+            </main>
+            <RightPanel />
+          </div>
         </div>
+        
+        {/* Add the chatbot component */}
+        {/* <MeetupBuddyChatbot 
+          context={{
+            currentPage: 'dashboard',
+            recentMeetings: ['Q4 Planning', 'Team Standup', 'Product Review']
+          }}
+        /> */}
       </SidebarInset>
     </SidebarProvider>
   )
