@@ -4,7 +4,9 @@ import * as React from "react"
 import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 
-export default function TopNav({ currentDate, view, setView, onToday }: { currentDate: Date, view: string, setView: (v: string) => void, onToday: () => void }) {
+type View = 'month' | 'week' | 'day' | 'agenda'
+
+export default function TopNav({ currentDate, view, setView, onToday }: { currentDate: Date, view: View, setView: React.Dispatch<React.SetStateAction<View>>, onToday: () => void }) {
   return (
     <div className="mb-4 flex items-center justify-between">
       <div className="flex items-center gap-3">

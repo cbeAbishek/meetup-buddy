@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import React from "react";
 import { ProtectedRoute } from "@/components/protected-route";
 
 export const metadata: Metadata = {
@@ -20,3 +21,4 @@ export default function DashboardLayout({
     </ProtectedRoute>
   );
 }
+

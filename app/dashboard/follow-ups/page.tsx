@@ -15,7 +15,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from "@/components/ui/badge"
 import { TasksTable } from "@/components/ui/tasks-table"
 import { Checkbox } from "@/components/ui/checkbox"
-import { RightPanel } from "@/components/ui/right-panel"
 
 export default function FollowUpsPage() {
   const router = useRouter()

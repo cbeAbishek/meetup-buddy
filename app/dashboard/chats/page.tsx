@@ -1,5 +1,19 @@
-'use client'
+"use client"
 
+import React, { useState, useEffect, useRef } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+// Card components not used in this page; removed to avoid unused import errors
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+  Send,
+  Search,
+  MoreVertical,
+  Phone,
+  Video,
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -15,13 +29,78 @@ import {
   MoreHorizontal,
   Paperclip,
   Smile,
+  Mic,
+  Check,
+  Clock,
   Users,
   Hash,
   Plus,
   Settings,
+  Pin,
+  Reply,
+  Forward
   Star,
   Archive
 } from 'lucide-react'
+import { useAuth } from '@/lib/auth-context'
+import { cn } from '@/lib/utils'
+import { ProtectedRoute } from '@/components/protected-route'
+
+// Mock data types
+interface User {
+  id: string
+  name: string
+  avatar?: string
+  role: 'host' | 'member' | 'leader'
+  status: 'online' | 'offline' | 'away'
+  lastSeen?: Date
+  email?: string
+  department?: string
+}
+
+interface Message {
+  id: string
+  senderId: string
+  content: string
+  timestamp: Date
+  type: 'text' | 'image' | 'file' | 'voice' | 'system'
+  status: 'sending' | 'sent' | 'delivered' | 'read'
+  replyTo?: string
+  reactions?: { emoji: string; users: string[] }[]
+}
+
+interface ChatRoom {
+  id: string
+  name: string
+  type: 'direct' | 'group'
+  avatar?: string
+  participants: User[]
+  lastMessage?: Message
+  unreadCount: number
+  isPinned: boolean
+  isArchived: boolean
+  groupLeader?: string
+  description?: string
+}
+
+// Mock data
+const mockUsers: User[] = [
+  { id: '1', name: 'Sarah Johnson', role: 'host', status: 'online', avatar: '/avatars/sarah.jpg', email: 'sarah@company.com', department: 'Management' },
+  { id: '2', name: 'Mike Chen', role: 'leader', status: 'online', avatar: '/avatars/mike.jpg', email: 'mike@company.com', department: 'Engineering' },
+  { id: '3', name: 'Emily Davis', role: 'member', status: 'away', avatar: '/avatars/emily.jpg', email: 'emily@company.com', department: 'Marketing' },
+  { id: '4', name: 'Alex Rodriguez', role: 'member', status: 'offline', lastSeen: new Date('2024-01-15T10:30:00'), email: 'alex@company.com', department: 'Sales' },
+  { id: '5', name: 'Jessica Wang', role: 'leader', status: 'online', avatar: '/avatars/jessica.jpg', email: 'jessica@company.com', department: 'Product' },
+  { id: '6', name: 'David Kim', role: 'member', status: 'online', avatar: '/avatars/david.jpg', email: 'david@company.com', department: 'Engineering' },
+]
+
+const mockMessages: Message[] = [
+  {
+    id: '1',
+    senderId: '2',
+    content: 'Hey team! Ready for tomorrow\'s quarterly review meeting?',
+    timestamp: new Date('2024-01-15T09:00:00'),
+    type: 'text',
+    status: 'read'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 const conversations = [
@@ -130,6 +209,30 @@ const messages = [
   }
 ]
 
+export default function ChatsPage() {
+  return (
+    <ProtectedRoute>
+      <ChatsContent />
+    </ProtectedRoute>
+  )
+}
+
+function ChatsContent() {
+  const [selectedChat, setSelectedChat] = useState<ChatRoom | null>(null)
+  const [messages, setMessages] = useState<Message[]>(mockMessages)
+  const [newMessage, setNewMessage] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isTyping] = useState(false)
+  const [chatRooms] = useState<ChatRoom[]>(mockChatRooms)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const { user } = useAuth()
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 export default function ChatPage() {
   const [selectedConversation, setSelectedConversation] = useState(conversations[0])
   const [newMessage, setNewMessage] = useState("")
@@ -149,6 +252,52 @@ export default function ChatPage() {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
+      sendMessage()
+    }
+  }
+
+  const getStatusIcon = (status: Message['status']) => {
+    switch (status) {
+      case 'sending':
+        return <Clock className="h-3 w-3 text-gray-400" />
+      case 'sent':
+        return <Check className="h-3 w-3 text-gray-400" />
+      case 'delivered':
+        return <Check className="h-3 w-3 text-gray-400" />
+      case 'read':
+        return <Check className="h-3 w-3 text-teal-500" />
+      default:
+        return null
+    }
+  }
+
+  const getStatusColor = (status: User['status']) => {
+    switch (status) {
+      case 'online':
+        return 'bg-green-500'
+      case 'away':
+        return 'bg-yellow-500'
+      case 'offline':
+        return 'bg-gray-400'
+    }
+  }
+
+  const getRoleIcon = (role: User['role']) => {
+    switch (role) {
+      case 'host':
+        return <Crown className="h-3 w-3 text-yellow-500" />
+      case 'leader':
+        return <Users className="h-3 w-3 text-teal-500" />
+      default:
+        return null
+    }
+  }
+
+  // Group creation UI was removed from this page for now; keep chat room state minimal.
+
+  const filteredChats = chatRooms.filter(chat =>
+    chat.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
       handleSendMessage()
     }
   }
