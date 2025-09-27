@@ -11,11 +11,12 @@ interface ConditionalClientLayoutProps {
 export function ConditionalClientLayout({ children }: ConditionalClientLayoutProps) {
   const pathname = usePathname()
   
-  // Check if current route is a dashboard route
+  // Check if current route is a dashboard or auth route
   const isDashboardRoute = pathname?.startsWith('/dashboard')
+  const isAuthRoute = pathname?.startsWith('/auth')
   
-  // If it's a dashboard route, render children without ClientLayout
-  if (isDashboardRoute) {
+  // If it's a dashboard or auth route, render children without ClientLayout
+  if (isDashboardRoute || isAuthRoute) {
     return <>{children}</>
   }
   
