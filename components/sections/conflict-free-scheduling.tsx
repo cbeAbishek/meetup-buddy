@@ -38,8 +38,11 @@ export function ConflictFreeScheduling() {
                 
                 <div className="grid grid-cols-7 gap-2">
                   {Array.from({ length: 35 }, (_, i) => {
-                    const isAvailable = Math.random() > 0.3
+                    // Use deterministic pattern instead of Math.random() to avoid hydration mismatch
+                    const unavailableDays = [2, 5, 9, 11, 14, 18, 19, 22, 26, 29, 32]
+                    const isAvailable = !unavailableDays.includes(i)
                     const isSelected = i === 16 || i === 17
+                    const dayNumber = i + 1 <= 31 ? i + 1 : null
                     return (
                       <motion.div
                         key={i}
@@ -52,7 +55,7 @@ export function ConflictFreeScheduling() {
                             : 'bg-slate-100 text-slate-400'
                         }`}
                       >
-                        {i + 1 <= 31 ? i + 1 : ''}
+                        {dayNumber}
                       </motion.div>
                     )
                   })}
