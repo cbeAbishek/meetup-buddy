@@ -219,7 +219,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                       <Icon
                         className={cn(
                           "h-4 w-4 transition-colors",
-                          isActive ? "text-white" : "text-teal-600 dark:text-teal-300"
+                          isActive ? "!text-white" : "text-teal-600 dark:text-teal-300"
                         )}
                       />
                       <span
